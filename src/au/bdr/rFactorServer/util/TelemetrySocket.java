@@ -60,7 +60,7 @@ public class TelemetrySocket extends Thread {
                 telemetry.setRpm(stringToDouble(nameValue[1]));
                 break;
             case "maxrpm":
-                telemetry.setMaxRpm(stringToDouble(nameValue[1]));
+                telemetry.setTempMaxRpm(stringToDouble(nameValue[1]));
                 break;
             case "water":
                 telemetry.setWater(stringToDouble(nameValue[1]));

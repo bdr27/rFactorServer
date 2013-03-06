@@ -22,6 +22,7 @@ public class Telemetry {
     private double water = 0;
     private double oil = 0;
     private double fuel = 0;
+    private double tempMaxRpm = 0;
     private String filename = "E:\\Program Files (x86)\\rFactor\\ExampleInternalsTelemetryOutput.txt";
 
     public Telemetry() {
@@ -41,6 +42,10 @@ public class Telemetry {
 
     public void setMaxRpm(double maxRpm) {
         this.maxRpm = maxRpm;
+    }
+    
+    public void setTempMaxRpm(double tempMaxRpm){
+        this.tempMaxRpm = tempMaxRpm;
     }
 
     public double getWater() {
@@ -84,6 +89,7 @@ public class Telemetry {
     /*
      * Old function for when it was loaded through text files
      */
+    @Deprecated
     public void loadTelemetry() {
         try {
         File file = new File(filename);
@@ -98,5 +104,17 @@ public class Telemetry {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Telemetry.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public boolean checkMaxRpm() {
+        if(maxRpm != 0 && maxRpm != tempMaxRpm){
+            maxRpm = tempMaxRpm;
+            return true;
+        }
+        return false;
+    }
+
+    public void setRpmStep() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

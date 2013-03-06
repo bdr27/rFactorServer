@@ -67,6 +67,13 @@ public class TelemetryPanel extends JPanel implements ActionListener {
 
             g.setColor(Color.BLACK);
             g.setFont(telemetryFont);
+            
+            //New code
+            if(telemetry.checkMaxRpm()){
+                telemetry.setRpmStep();
+            }
+            
+            //Old code
             //Need to shift this to the telemetry class
             if (telemetry.getMaxRpm() != 0 && telemetry.getMaxRpm() != currentMaxRpm) {
                 currentMaxRpm = telemetry.getMaxRpm();
