@@ -52,6 +52,8 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             System.out.println("Stopping Timer");
         }
     }
+    
+    
 
     /*
      * Draw the telemetry stuff that I'll need
@@ -69,18 +71,7 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             g.setFont(telemetryFont);
             
             //New code
-            if(telemetry.checkMaxRpm()){
-                telemetry.setRpmStep();
-            }
-            
-            //Old code
-            //Need to shift this to the telemetry class
-            if (telemetry.getMaxRpm() != 0 && telemetry.getMaxRpm() != currentMaxRpm) {
-                currentMaxRpm = telemetry.getMaxRpm();
-                rpmStep = findRpmSteps(simultaneousEquationSolver(3.5, 10, currentMaxRpm / 2, currentMaxRpm), numOfSteps);
-            }
-
-            drawRevGuage(g, panelSize, rpmStep, telemetry.getRpm(), numOfSteps);
+            telemetry.draw(g, panelSize);
             drawSpeed(g, panelSize, telemetry.getSpeed());
 
             if (DEBUG) {
@@ -90,72 +81,8 @@ public class TelemetryPanel extends JPanel implements ActionListener {
         }
     }
 
-    private void drawRevGuage(Graphics2D g, Dimension panelSize, double[] rpmSteps, double currentRpm, int steps) {
-        //Needs to be in a seperate function, possible a draw string function
-        g.drawString("" + (int) currentRpm, (float) panelSize.width / 2f, (float) panelSize.height * .1f);
-        for (int i = 0; i < steps; i++) {
-            int width = (int) (panelSize.width * .07);
-            int height = (int) (panelSize.height * .3);
-            int x = (int) (panelSize.width * .05 + i * panelSize.width * 0.09);
-            int y = (int) (panelSize.height * .15);
-
-            if (rpmSteps[0] != 0 && rpmSteps[i] < currentRpm) {
-                g.fillRect(x, y, width, height);
-            } else {
-                g.drawRect(x, y, width, height);
-            }
-        }
-    }
-
-    @Deprecated
-    private void oldDrawRevGuage(Graphics2D g, Dimension panelSize, double rpmStep, double currentRpm) {
-        g.drawString("" + (int) currentRpm, (float) panelSize.width / 2f, (float) panelSize.height * .1f);
-        for (int i = 0; i < 10; i++) {
-            int width = (int) (panelSize.width * .07);
-            int height = (int) (panelSize.height * .3);
-            int x = (int) (panelSize.width * .05 + i * panelSize.width * 0.09);
-            int y = (int) (panelSize.height * .15);
-
-            //Works with drawing of the rev guage but potential needs to be non linear
-            //Weird glitch while ai has control this doesn't work
-            if (rpmStep < 1 || rpmStep * (i + 1) > currentRpm) {
-                g.drawRect(x, y, width, height);
-            } else {
-                g.fillRect(x, y, width, height);
-            }
-        }
-    }
-
     private void drawSpeed(Graphics2D g, Dimension panelSize, double speed) {
         g.drawString("" + (int) speed, (int) (panelSize.width / 2), (int) (panelSize.height * .55));
-    }
-
-    private double[] findRpmSteps(double[] missingValues, int steps) {
-        double a = missingValues[0];
-        double b = missingValues[1];
-        if (DEBUG) {
-            System.out.println("value of a: " + a);
-            System.out.println("value of b: " + b);
-        }
-        double[] localRpmStep = new double[steps];
-
-        for (int i = 1; i <= steps; i++) {
-            localRpmStep[i - 1] = (a * i * i + b * i) * .98;
-            //Reduces by 2% so final one will hopefully light up
-            if (DEBUG) {
-                System.out.println("Rpm step: " + localRpmStep[i - 1]);
-            }
-        }
-
-        return localRpmStep;
-    }
-
-    private double[] simultaneousEquationSolver(double x1, double x2, double y1, double y2) {
-
-        double a = ((y2 / x2) - (y1 / x1)) / (x2 - x1);
-        double b = (y1 / x1) - a * x1;
-        double[] missingValues = {a, b};
-        return missingValues;
     }
 
     @Override
