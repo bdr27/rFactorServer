@@ -128,29 +128,29 @@ public class Telemetry {
         System.out.println("I set it up");
     }
 
-    public void draw(Graphics2D g, Dimension panelSize) {
-        if (checkMaxRpm()) {
-            rpmSteps = findRpmSteps(simultaneousEquationSolver(3.5, 10, maxRpm / 2, maxRpm), steps);
-        }
-        drawRevGuage(g, panelSize);
-    }
-
-    private void drawRevGuage(Graphics2D g, Dimension panelSize) {
-        //Needs to be in a seperate function, possible a draw string function
-        g.drawString("" + (int) rpm, (float) panelSize.width / 2f, (float) panelSize.height * .1f);
-        for (int i = 0; i < steps; i++) {
-            int width = (int) (panelSize.width * .07);
-            int height = (int) (panelSize.height * .3);
-            int x = (int) (panelSize.width * .05 + i * panelSize.width * 0.09);
-            int y = (int) (panelSize.height * .15);
-
-            if (rpmSteps[0] != 0 && rpmSteps[i] < rpm) {
-                g.fillRect(x, y, width, height);
-            } else {
-                g.drawRect(x, y, width, height);
-            }
-        }
-    }
+//    public void draw(Graphics2D g, Dimension panelSize) {
+//        if (checkMaxRpm()) {
+//            rpmSteps = findRpmSteps(simultaneousEquationSolver(3.5, 10, maxRpm / 2, maxRpm), steps);
+//        }
+//        drawRevGuage(g, panelSize);
+//    }
+//
+//    private void drawRevGuage(Graphics2D g, Dimension panelSize) {
+//        //Needs to be in a seperate function, possible a draw string function
+//        g.drawString("" + (int) rpm, (float) panelSize.width / 2f, (float) panelSize.height * .1f);
+//        for (int i = 0; i < steps; i++) {
+//            int width = (int) (panelSize.width * .07);
+//            int height = (int) (panelSize.height * .3);
+//            int x = (int) (panelSize.width * .05 + i * panelSize.width * 0.07);
+//            int y = (int) (panelSize.height * .15);
+//
+//            if (rpmSteps[0] != 0 && rpmSteps[i] < rpm) {
+//                g.fillRect(x, y, width, height);
+//            } else {
+//                g.drawRect(x, y, width, height);
+//            }
+//        }
+//    }
     
     private double[] simultaneousEquationSolver(double x1, double x2, double y1, double y2) {
 

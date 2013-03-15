@@ -71,7 +71,7 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             g.setColor(Color.BLACK);
             g.setFont(telemetryFont);
             
-            telemetryView.resizeScreen(panelSize.width, panelSize.height);
+            telemetryView.checkTelemetryView(panelSize.width, panelSize.height);
             
             //New code
          //   telemetry.draw(g, panelSize);
