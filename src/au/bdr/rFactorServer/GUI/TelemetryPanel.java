@@ -73,6 +73,20 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             
             telemetryView.checkTelemetryView(panelSize.width, panelSize.height);
             
+            int emptyGuage = telemetryView.startEmptyGuage();
+            double[] xLocations = telemetryView.getRpmXLocations();
+            double[] yLocations = telemetryView.getRpmYLocations();
+            double[] widths = telemetryView.getRpmWidth();
+            double[] heights = telemetryView.getRpmHeight();
+            
+            for(int i = 0; i < xLocations.length; ++i){
+                if(i > emptyGuage){
+                    g.drawRect((int) xLocations[i], (int) yLocations[i], (int) widths[i], (int) heights[i]);
+                }else{
+                     g.fillRect((int) xLocations[i], (int) yLocations[i], (int) widths[i], (int) heights[i]);
+                }
+            }
+            
             //New code
          //   telemetry.draw(g, panelSize);
         //    drawSpeed(g, panelSize, telemetry.getSpeed());

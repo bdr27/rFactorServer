@@ -16,13 +16,13 @@ public class TelemetryView {
     private int screenHeight = 0;
     private int rpmSteps = 10;
     private double rpmSizeX = 0.07;
-    private double rpmGapX = 0.05;
+    private double rpmGapX = 0.1;
     private double rpmSizeY = .15;
-    private double[] rpmXLocations;
-    private double[] rpmYLocations;
-    private double[] rpmHeight;
-    private double[] rpmWidth;
-    private double[] rpmStepValues;
+    private double[] rpmXLocations = new double[rpmSteps];
+    private double[] rpmYLocations = new double[rpmSteps];
+    private double[] rpmHeight = new double[rpmSteps];
+    private double[] rpmWidth = new double[rpmSteps];
+    private double[] rpmStepValues = new double[rpmSteps];
 
     public TelemetryView(Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -38,6 +38,7 @@ public class TelemetryView {
         resizeScreen(width, height);
         if(telemetry.checkMaxRpm()){
             //Change the rpmStepValues
+            rpmStepValues = new double[rpmSteps];
             rpmStepValues = findRpmSteps(simultaneousEquationSolver(2.5, 10, telemetry.getMaxRpm()/2, telemetry.getMaxRpm()),rpmSteps);
         }
     }
@@ -58,9 +59,10 @@ public class TelemetryView {
 
         for (int i = 0; i < rpmSteps; ++i) {
             rpmWidth[i] = (screenWidth * rpmSizeX);
-            rpmXLocations[i] = (screenWidth * rpmGapX + i * screenWidth * rpmSizeX);
-            rpmYLocations[i] = screenHeight * rpmSizeY;
             rpmHeight[i] = screenHeight * rpmSizeY;
+            rpmXLocations[i] = screenWidth * rpmGapX + i * screenWidth * rpmSizeX;
+            rpmYLocations[i] = screenHeight * rpmSizeY;
+            
         }
     }
     
@@ -110,5 +112,17 @@ public class TelemetryView {
     
     public double[] getRpmStepValues(){
         return rpmStepValues;
+    }
+    
+    public int startEmptyGuage(){
+        int emptryGuage = 0;        
+        System.out.println(rpmStepValues.toString());
+        for(int i = 0; i < rpmSteps; i++){
+            if (rpmStepValues[0] != 0 && rpmStepValues[i] < telemetry.getRpm()) {
+                emptryGuage = i;
+                break;
+            }
+        }
+        return emptryGuage;
     }
 }
