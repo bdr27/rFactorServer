@@ -40,10 +40,10 @@ public class LanReachable extends Thread{
     }
     
     public void setSubnet(String subnet){
-        this.subnet = subnet;
+        LanReachable.subnet = subnet;
     }
     
     public void setTimeout(int timeout){
-        this.timeout = timeout;
+        LanReachable.timeout = timeout;
     }
 }

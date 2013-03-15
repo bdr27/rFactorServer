@@ -6,6 +6,7 @@ package au.bdr.rFactorServer.GUI;
 
 import au.bdr.rFactorServer.util.Debug;
 import au.bdr.rFactorServer.util.Telemetry;
+import au.bdr.rFactorServer.util.TelemetryView;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -26,7 +27,7 @@ public class TelemetryPanel extends JPanel implements ActionListener {
     private static final Font DEBUG_FONT = new Font("Menlo", Font.BOLD, 10);
     private Font telemetryFont;
     private Dimension panelSize;
-    private Telemetry telemetry;
+    private TelemetryView telemetryView;
     private Timer timer;
     private double[] rpmStep = new double[1];
     private int test = 0;
@@ -34,7 +35,7 @@ public class TelemetryPanel extends JPanel implements ActionListener {
     private int numOfSteps = 10;
 
     public TelemetryPanel(Telemetry telemetry) {
-        this.telemetry = telemetry;
+        this.telemetryView = new TelemetryView(telemetry);
         timer = new Timer(100, this);
     }
 
@@ -70,12 +71,14 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             g.setColor(Color.BLACK);
             g.setFont(telemetryFont);
             
+            telemetryView.resizeScreen(panelSize.width, panelSize.height);
+            
             //New code
-            telemetry.draw(g, panelSize);
-            drawSpeed(g, panelSize, telemetry.getSpeed());
+         //   telemetry.draw(g, panelSize);
+        //    drawSpeed(g, panelSize, telemetry.getSpeed());
 
             if (DEBUG) {
-                System.out.println(telemetry);
+       //         System.out.println(telemetry);
                 System.out.println(panelSize);
             }
         }
