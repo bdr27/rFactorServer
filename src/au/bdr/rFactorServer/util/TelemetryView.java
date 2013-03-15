@@ -15,9 +15,9 @@ public class TelemetryView {
     private int screenWidth = 0;
     private int screenHeight = 0;
     private int rpmSteps = 10;
-    private double rpmSizeX = 0.07;
-    private double rpmGapX = 0.1;
-    private double rpmSizeY = .15;
+    private double rpmSizeX = 0.05;
+    private double rpmGapX = 0.02;
+    private double rpmSizeY = .30;
     private double[] rpmXLocations = new double[rpmSteps];
     private double[] rpmYLocations = new double[rpmSteps];
     private double[] rpmHeight = new double[rpmSteps];
@@ -58,10 +58,10 @@ public class TelemetryView {
         rpmHeight = new double[rpmSteps];        
 
         for (int i = 0; i < rpmSteps; ++i) {
-            rpmWidth[i] = (screenWidth * rpmSizeX);
+            rpmWidth[i] = screenWidth * rpmSizeX;
             rpmHeight[i] = screenHeight * rpmSizeY;
-            rpmXLocations[i] = screenWidth * rpmGapX + i * screenWidth * rpmSizeX;
-            rpmYLocations[i] = screenHeight * rpmSizeY;
+            rpmXLocations[i] = screenWidth * rpmSizeX + i * screenWidth * (rpmSizeX + rpmGapX);
+            rpmYLocations[i] = 10;
             
         }
     }
@@ -115,12 +115,12 @@ public class TelemetryView {
     }
     
     public int startEmptyGuage(){
-        int emptryGuage = 0;        
-        System.out.println(rpmStepValues.toString());
+        int emptryGuage = -1;        
+        System.out.println("Amount of rpmSteps: " + rpmSteps);
         for(int i = 0; i < rpmSteps; i++){
-            if (rpmStepValues[0] != 0 && rpmStepValues[i] < telemetry.getRpm()) {
+            System.out.println("current rpmStepValue: " + rpmStepValues[i] + "current rpm: " + telemetry.getRpm());
+            if (rpmStepValues[i] * .98 < telemetry.getRpm()) {
                 emptryGuage = i;
-                break;
             }
         }
         return emptryGuage;
