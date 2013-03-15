@@ -39,7 +39,7 @@ public class TelemetryView {
         if(telemetry.checkMaxRpm()){
             //Change the rpmStepValues
             rpmStepValues = new double[rpmSteps];
-            rpmStepValues = findRpmSteps(simultaneousEquationSolver(2.5, 10, telemetry.getMaxRpm()/2, telemetry.getMaxRpm()),rpmSteps);
+            rpmStepValues = findRpmSteps(simultaneousEquationSolver(3.5, 10, telemetry.getMaxRpm()/2, telemetry.getMaxRpm()),rpmSteps);
         }
     }
 
