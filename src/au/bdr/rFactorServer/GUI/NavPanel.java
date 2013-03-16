@@ -22,7 +22,7 @@ import javax.swing.JPanel;
  * @author Brendan Russo
  */
 public class NavPanel extends JPanel{
-    private static final String author = "Written by: Brendan Russo";
+    private final String author = "Written by: Brendan Russo";
     ArrayList<JButton> navButtons = new ArrayList<>();
     GridLayout navLayout;
     int gridWidth = 0;

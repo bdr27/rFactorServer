@@ -10,7 +10,7 @@ package au.bdr.rFactorServer.util;
  */
 public class TelemetryView {
 
-    private static final boolean DEBUG = new Debug().getDebug();
+    private final boolean DEBUG = new Debug().getDebug();
     private Telemetry telemetry;
     private int screenWidth = 0;
     private int screenHeight = 0;

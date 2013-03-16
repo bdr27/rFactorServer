@@ -25,8 +25,6 @@ public class Telemetry {
     private double tempMaxRpm = 0;
     private double water = 0;
     private double oil = 0;
-    private int steps = 10;
-    private double rpmSteps[] = new double[steps];
     private double fuel = 0;
     private String filename = "E:\\Program Files (x86)\\rFactor\\ExampleInternalsTelemetryOutput.txt";
 
@@ -152,31 +150,31 @@ public class Telemetry {
 //        }
 //    }
     
-    private double[] simultaneousEquationSolver(double x1, double x2, double y1, double y2) {
-
-        double a = ((y2 / x2) - (y1 / x1)) / (x2 - x1);
-        double b = (y1 / x1) - a * x1;
-        double[] missingValues = {a, b};
-        return missingValues;
-    }
-    
-    private double[] findRpmSteps(double[] missingValues, int steps) {
-        double a = missingValues[0];
-        double b = missingValues[1];
-        if (DEBUG) {
-            System.out.println("value of a: " + a);
-            System.out.println("value of b: " + b);
-        }
-        double[] localRpmStep = new double[steps];
-
-        for (int i = 1; i <= steps; i++) {
-            localRpmStep[i - 1] = (a * i * i + b * i) * .98;
-            //Reduces by 2% so final one will hopefully light up
-            if (DEBUG) {
-                System.out.println("Rpm step: " + localRpmStep[i - 1]);
-            }
-        }
-
-        return localRpmStep;
-    }
+//    private double[] simultaneousEquationSolver(double x1, double x2, double y1, double y2) {
+//
+//        double a = ((y2 / x2) - (y1 / x1)) / (x2 - x1);
+//        double b = (y1 / x1) - a * x1;
+//        double[] missingValues = {a, b};
+//        return missingValues;
+//    }
+//    
+//    private double[] findRpmSteps(double[] missingValues, int steps) {
+//        double a = missingValues[0];
+//        double b = missingValues[1];
+//        if (DEBUG) {
+//            System.out.println("value of a: " + a);
+//            System.out.println("value of b: " + b);
+//        }
+//        double[] localRpmStep = new double[steps];
+//
+//        for (int i = 1; i <= steps; i++) {
+//            localRpmStep[i - 1] = (a * i * i + b * i) * .98;
+//            //Reduces by 2% so final one will hopefully light up
+//            if (DEBUG) {
+//                System.out.println("Rpm step: " + localRpmStep[i - 1]);
+//            }
+//        }
+//
+//        return localRpmStep;
+//    }
 }

@@ -23,8 +23,8 @@ import javax.swing.Timer;
  */
 public class TelemetryPanel extends JPanel implements ActionListener {
 
-    private final static boolean DEBUG = new Debug().getDebug();
-    private static final Font DEBUG_FONT = new Font("Menlo", Font.BOLD, 10);
+    private final boolean DEBUG = new Debug().getDebug();
+    private final Font DEBUG_FONT = new Font("Menlo", Font.BOLD, 10);
     private Font telemetryFont;
     private Dimension panelSize;
     private TelemetryView telemetryView;

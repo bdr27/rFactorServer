@@ -5,10 +5,6 @@
 package au.bdr.rFactorServer.GUI;
 
 import au.bdr.rFactorServer.util.Debug;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 /**
@@ -17,8 +13,8 @@ import javax.swing.JPanel;
  */
 public class HomePanel extends JPanel {
 
-    private static boolean NOTLOOKEDAT = true;
-    private static boolean DEBUG = new Debug().getDebug();
+    private boolean NOTLOOKEDAT = true;
+    private boolean DEBUG = new Debug().getDebug();
 
     public HomePanel() {
     }
