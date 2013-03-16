@@ -17,7 +17,7 @@ public class TelemetryView {
     private int rpmSteps = 10;
     private double rpmSizeX = 0.05;
     private double rpmGapX = 0.02;
-    private double rpmSizeY = .30;
+    private double rpmSizeY = .50;
     private double[] rpmXLocations = new double[rpmSteps];
     private double[] rpmYLocations = new double[rpmSteps];
     private double[] rpmHeight = new double[rpmSteps];
@@ -28,18 +28,18 @@ public class TelemetryView {
         this.telemetry = telemetry;
         // Potential load config file at some point
     }
-    
+
     /*
      * Method that will check weather any value for the Telemetry view has 
      * changed. Will be called everytime before the object is redrawn to make
      * sure the max rpm hasn't changed or screen size changed ect.
      */
-    public void checkTelemetryView(int width, int height){
+    public void checkTelemetryView(int width, int height) {
         resizeScreen(width, height);
-        if(telemetry.checkMaxRpm()){
+        if (telemetry.checkMaxRpm()) {
             //Change the rpmStepValues
             rpmStepValues = new double[rpmSteps];
-            rpmStepValues = findRpmSteps(simultaneousEquationSolver(3.5, 10, telemetry.getMaxRpm()/2, telemetry.getMaxRpm()),rpmSteps);
+            rpmStepValues = findRpmSteps(simultaneousEquationSolver(3.5, 10, telemetry.getMaxRpm() / 2, telemetry.getMaxRpm()), rpmSteps);
         }
     }
 
@@ -55,17 +55,17 @@ public class TelemetryView {
         rpmXLocations = new double[rpmSteps];
         rpmYLocations = new double[rpmSteps];
         rpmWidth = new double[rpmSteps];
-        rpmHeight = new double[rpmSteps];        
+        rpmHeight = new double[rpmSteps];
 
         for (int i = 0; i < rpmSteps; ++i) {
             rpmWidth[i] = screenWidth * rpmSizeX;
             rpmHeight[i] = screenHeight * rpmSizeY;
             rpmXLocations[i] = screenWidth * rpmSizeX + i * screenWidth * (rpmSizeX + rpmGapX);
             rpmYLocations[i] = 10;
-            
+
         }
     }
-    
+
     private double[] simultaneousEquationSolver(double x1, double x2, double y1, double y2) {
 
         double a = ((y2 / x2) - (y1 / x1)) / (x2 - x1);
@@ -73,7 +73,7 @@ public class TelemetryView {
         double[] missingValues = {a, b};
         return missingValues;
     }
-    
+
     private double[] findRpmSteps(double[] missingValues, int steps) {
         double a = missingValues[0];
         double b = missingValues[1];
@@ -93,32 +93,36 @@ public class TelemetryView {
 
         return localRpmStep;
     }
-    
-    public double[] getRpmXLocations(){
+
+    public double[] getRpmXLocations() {
         return rpmXLocations;
     }
-    
-    public double[] getRpmYLocations(){
+
+    public double[] getRpmYLocations() {
         return rpmYLocations;
     }
-    
-    public double[] getRpmHeight(){
+
+    public double[] getRpmHeight() {
         return rpmHeight;
     }
-    
-    public double[] getRpmWidth(){
+
+    public double[] getRpmWidth() {
         return rpmWidth;
     }
-    
-    public double[] getRpmStepValues(){
+
+    public double[] getRpmStepValues() {
         return rpmStepValues;
     }
-    
-    public int startEmptyGuage(){
-        int emptryGuage = -1;        
-        System.out.println("Amount of rpmSteps: " + rpmSteps);
-        for(int i = 0; i < rpmSteps; i++){
-            System.out.println("current rpmStepValue: " + rpmStepValues[i] + "current rpm: " + telemetry.getRpm());
+
+    public int startEmptyGuage() {
+        int emptryGuage = -1;
+        if (DEBUG) {
+            System.out.println("Amount of rpmSteps: " + rpmSteps);
+        }
+        for (int i = 0; i < rpmSteps; i++) {
+            if (DEBUG) {
+                System.out.println("current rpmStepValue: " + rpmStepValues[i] + "current rpm: " + telemetry.getRpm());
+            }
             if (rpmStepValues[i] * .98 < telemetry.getRpm()) {
                 emptryGuage = i;
             }
