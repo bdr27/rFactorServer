@@ -6,6 +6,7 @@ package au.bdr.rFactorServer.GUI;
 
 import au.bdr.rFactorServer.util.Debug;
 import au.bdr.rFactorServer.util.RpmGuage;
+import au.bdr.rFactorServer.util.SpeedGuage;
 import au.bdr.rFactorServer.util.Telemetry;
 import au.bdr.rFactorServer.util.TelemetryView;
 import java.awt.Color;
@@ -58,15 +59,15 @@ public class TelemetryPanel extends JPanel implements ActionListener {
      */
     @Override
     protected void paintComponent(Graphics graphic) {
-        super.paintComponent(graphic);
-
         synchronized (this) {
-            Graphics2D g = (Graphics2D) graphic;
+            super.paintComponent(graphic);
             panelSize = this.getSize();
+            telemetryView.checkTelemetryView(panelSize.width, panelSize.height);    
             telemetryFont = new Font("Menlo", Font.BOLD, panelSize.height / 10);
-
-            g.setColor(Color.BLACK);            
-            telemetryView.checkTelemetryView(panelSize.width, panelSize.height);
+            Graphics2D g = (Graphics2D) graphic;
+            
+            g.setColor(Color.BLACK); 
+            g.setFont(telemetryFont);
             
             int emptyGuage = telemetryView.startEmptyGuage();
             RpmGuage rpmGuage = telemetryView.getRpmGuage();
@@ -78,6 +79,12 @@ public class TelemetryPanel extends JPanel implements ActionListener {
                      g.fillRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
                 }
             }
+            
+            SpeedGuage speedGuage = telemetryView.getSpeedGuage();
+            System.out.println(speedGuage.xLocation + " " + speedGuage.yLocation);
+            g.drawString("" + (int) speedGuage.speed, (int) speedGuage.xLocation, (int) speedGuage.yLocation);
+          
+            
             
             
             //New code

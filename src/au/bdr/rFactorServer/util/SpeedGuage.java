@@ -9,8 +9,8 @@ package au.bdr.rFactorServer.util;
  * @author Brendan
  */
 public class SpeedGuage {
-    double speed;
-    double xLocation;
-    double yLocation;
-    double size;
+    public double speed;
+    public double xLocation;
+    public double yLocation;
+    public double size;
 }
