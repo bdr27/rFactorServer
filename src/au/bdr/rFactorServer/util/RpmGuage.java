@@ -10,13 +10,13 @@ package au.bdr.rFactorServer.util;
  */
 public class RpmGuage {
     //
-    public int amount;
+    public int amountDrawn;
     public double[] xLocations;
     public double[] yLocations;
     public double[] height;
     public double[] width;
     
-    public RpmGuage(int amount){
-        this.amount = amount;
+    public RpmGuage(int amountDrawn){
+        this.amountDrawn = amountDrawn;
     }
 }

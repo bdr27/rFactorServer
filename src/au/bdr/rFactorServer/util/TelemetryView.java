@@ -21,6 +21,7 @@ public class TelemetryView {
     private double[] rpmStepValues = new double[rpmSteps];
     
     private RpmGuage rpmGuage = new RpmGuage(rpmSteps);
+    private SpeedGuage speedGuage;
 
     public TelemetryView(Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -46,17 +47,18 @@ public class TelemetryView {
             this.screenWidth = width;
             this.screenHeight = height;
             resizeRpmGuage();
+            resizeSpeed();
         }
     }
 
     private void resizeRpmGuage() {
-        rpmGuage.amount = rpmSteps;
-        rpmGuage.xLocations = new double[rpmSteps];
-        rpmGuage.yLocations = new double[rpmSteps];
-        rpmGuage.width = new double[rpmSteps];
-        rpmGuage.height = new double[rpmSteps];
+        rpmGuage.amountDrawn = rpmSteps;
+        rpmGuage.xLocations = new double[rpmGuage.amountDrawn];
+        rpmGuage.yLocations = new double[rpmGuage.amountDrawn];
+        rpmGuage.width = new double[rpmGuage.amountDrawn];
+        rpmGuage.height = new double[rpmGuage.amountDrawn];
 
-        for (int i = 0; i < rpmSteps; ++i) {
+        for (int i = 0; i < rpmGuage.amountDrawn; ++i) {
             rpmGuage.width[i] = screenWidth * rpmSizeX;
             rpmGuage.height[i] = screenHeight * rpmSizeY;
             rpmGuage.xLocations[i] = screenWidth * rpmSizeX + i * screenWidth * (rpmSizeX + rpmGapX);
@@ -114,5 +116,10 @@ public class TelemetryView {
             }
         }
         return emptyGuage;
+    }
+
+    private void resizeSpeed() {
+        speedGuage.speed = telemetry.getSpeed();
+        
     }
 }

@@ -30,10 +30,6 @@ public class TelemetryPanel extends JPanel implements ActionListener {
     private Dimension panelSize;
     private TelemetryView telemetryView;
     private Timer timer;
-    private double[] rpmStep = new double[1];
-    private int test = 0;
-    private double currentMaxRpm = 0;
-    private int numOfSteps = 10;
 
     public TelemetryPanel(Telemetry telemetry) {
         this.telemetryView = new TelemetryView(telemetry);
@@ -69,21 +65,20 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             panelSize = this.getSize();
             telemetryFont = new Font("Menlo", Font.BOLD, panelSize.height / 10);
 
-            g.setColor(Color.BLACK);
-            g.setFont(telemetryFont);
-            
+            g.setColor(Color.BLACK);            
             telemetryView.checkTelemetryView(panelSize.width, panelSize.height);
             
             int emptyGuage = telemetryView.startEmptyGuage();
             RpmGuage rpmGuage = telemetryView.getRpmGuage();
             
-            for(int i = 0; i < rpmGuage.amount; ++i){
+            for(int i = 0; i < rpmGuage.amountDrawn; ++i){
                 if(i > emptyGuage){
                     g.drawRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
                 }else{
                      g.fillRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
                 }
             }
+            
             
             //New code
          //   telemetry.draw(g, panelSize);
@@ -93,12 +88,13 @@ public class TelemetryPanel extends JPanel implements ActionListener {
        //         System.out.println(telemetry);
                 System.out.println(panelSize);
             }
+            g.dispose();
         }
     }
 
-    private void drawSpeed(Graphics2D g, Dimension panelSize, double speed) {
-        g.drawString("" + (int) speed, (int) (panelSize.width / 2), (int) (panelSize.height * .55));
-    }
+//    private void drawSpeed(Graphics2D g, Dimension panelSize, double speed) {
+//        g.drawString("" + (int) speed, (int) (panelSize.width / 2), (int) (panelSize.height * .55));
+//    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
