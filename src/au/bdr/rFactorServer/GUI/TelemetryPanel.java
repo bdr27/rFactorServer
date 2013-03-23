@@ -51,8 +51,6 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             System.out.println("Stopping Timer");
         }
     }
-    
-    
 
     /*
      * Draw the telemetry stuff that I'll need
@@ -62,47 +60,52 @@ public class TelemetryPanel extends JPanel implements ActionListener {
         synchronized (this) {
             super.paintComponent(graphic);
             panelSize = this.getSize();
-            telemetryView.checkTelemetryView(panelSize.width, panelSize.height);    
+            telemetryView.checkTelemetryView(panelSize.width, panelSize.height);
             telemetryFont = new Font("Menlo", Font.BOLD, panelSize.height / 10);
             Graphics2D g = (Graphics2D) graphic;
-            
-            g.setColor(Color.BLACK); 
+
+            g.setColor(Color.BLACK);
             g.setFont(telemetryFont);
-            
+
             int emptyGuage = telemetryView.startEmptyGuage();
             RpmGuage rpmGuage = telemetryView.getRpmGuage();
-            
-            for(int i = 0; i < rpmGuage.amountDrawn; ++i){
-                if(i > emptyGuage){
+
+            for (int i = 0; i < rpmGuage.amountDrawn; ++i) {
+                if (i > emptyGuage) {
                     g.drawRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
-                }else{
-                     g.fillRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
+                } else {
+                    g.fillRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
                 }
             }
             
             SpeedGuage speedGuage = telemetryView.getSpeedGuage();
-            System.out.println(speedGuage.xLocation + " " + speedGuage.yLocation);
-            g.drawString("" + (int) speedGuage.speed, (int) speedGuage.xLocation, (int) speedGuage.yLocation);
-          
+            Font speedGuageFont = new Font("Menlo", Font.BOLD, (int) speedGuage.size);
+            g.setFont(speedGuageFont);
             
-            
-            
+            if (DEBUG) {
+                System.out.println(speedGuage.xLocation + " " + speedGuage.yLocation);
+            }
+            g.drawString(speedGuage.toString(), (int) speedGuage.xLocation, (int) speedGuage.yLocation);
+
+
+
+
             //New code
-         //   telemetry.draw(g, panelSize);
-        //    drawSpeed(g, panelSize, telemetry.getSpeed());
+            //   telemetry.draw(g, panelSize);
+            //    drawSpeed(g, panelSize, telemetry.getSpeed());
 
             if (DEBUG) {
-       //         System.out.println(telemetry);
+                //         System.out.println(telemetry);
                 System.out.println(panelSize);
             }
             g.dispose();
+
         }
     }
 
 //    private void drawSpeed(Graphics2D g, Dimension panelSize, double speed) {
 //        g.drawString("" + (int) speed, (int) (panelSize.width / 2), (int) (panelSize.height * .55));
 //    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();

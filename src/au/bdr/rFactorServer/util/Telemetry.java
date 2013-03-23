@@ -110,8 +110,10 @@ public class Telemetry {
     }
 
     public boolean checkMaxRpm() {
-        System.out.println("max rpm: " + maxRpm + "temp max rpm: " + tempMaxRpm);
-        if(maxRpm != tempMaxRpm && tempMaxRpm != 0){
+        if (DEBUG) {
+            System.out.println("max rpm: " + maxRpm + "temp max rpm: " + tempMaxRpm);
+        }
+        if (maxRpm != tempMaxRpm && tempMaxRpm != 0) {
             maxRpm = tempMaxRpm;
             return true;
         }
@@ -125,7 +127,6 @@ public class Telemetry {
     public void setRpmGuage() {
         System.out.println("I set it up");
     }
-
 //    public void draw(Graphics2D g, Dimension panelSize) {
 //        if (checkMaxRpm()) {
 //            rpmSteps = findRpmSteps(simultaneousEquationSolver(3.5, 10, maxRpm / 2, maxRpm), steps);
@@ -149,7 +150,6 @@ public class Telemetry {
 //            }
 //        }
 //    }
-    
 //    private double[] simultaneousEquationSolver(double x1, double x2, double y1, double y2) {
 //
 //        double a = ((y2 / x2) - (y1 / x1)) / (x2 - x1);
