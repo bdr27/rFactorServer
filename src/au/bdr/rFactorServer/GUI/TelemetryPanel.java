@@ -5,6 +5,7 @@
 package au.bdr.rFactorServer.GUI;
 
 import au.bdr.rFactorServer.util.Debug;
+import au.bdr.rFactorServer.util.RpmGuage;
 import au.bdr.rFactorServer.util.Telemetry;
 import au.bdr.rFactorServer.util.TelemetryView;
 import java.awt.Color;
@@ -74,16 +75,13 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             telemetryView.checkTelemetryView(panelSize.width, panelSize.height);
             
             int emptyGuage = telemetryView.startEmptyGuage();
-            double[] xLocations = telemetryView.getRpmXLocations();
-            double[] yLocations = telemetryView.getRpmYLocations();
-            double[] widths = telemetryView.getRpmWidth();
-            double[] heights = telemetryView.getRpmHeight();
+            RpmGuage rpmGuage = telemetryView.getRpmGuage();
             
-            for(int i = 0; i < xLocations.length; ++i){
+            for(int i = 0; i < rpmGuage.amount; ++i){
                 if(i > emptyGuage){
-                    g.drawRect((int) xLocations[i], (int) yLocations[i], (int) widths[i], (int) heights[i]);
+                    g.drawRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
                 }else{
-                     g.fillRect((int) xLocations[i], (int) yLocations[i], (int) widths[i], (int) heights[i]);
+                     g.fillRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
                 }
             }
             

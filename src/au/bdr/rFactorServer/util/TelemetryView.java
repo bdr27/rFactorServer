@@ -17,12 +17,10 @@ public class TelemetryView {
     private int rpmSteps = 10;
     private double rpmSizeX = 0.05;
     private double rpmGapX = 0.02;
-    private double rpmSizeY = .50;
-    private double[] rpmXLocations = new double[rpmSteps];
-    private double[] rpmYLocations = new double[rpmSteps];
-    private double[] rpmHeight = new double[rpmSteps];
-    private double[] rpmWidth = new double[rpmSteps];
+    private double rpmSizeY = .50;   
     private double[] rpmStepValues = new double[rpmSteps];
+    
+    private RpmGuage rpmGuage = new RpmGuage(rpmSteps);
 
     public TelemetryView(Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -52,17 +50,17 @@ public class TelemetryView {
     }
 
     private void resizeRpmGuage() {
-        rpmXLocations = new double[rpmSteps];
-        rpmYLocations = new double[rpmSteps];
-        rpmWidth = new double[rpmSteps];
-        rpmHeight = new double[rpmSteps];
+        rpmGuage.amount = rpmSteps;
+        rpmGuage.xLocations = new double[rpmSteps];
+        rpmGuage.yLocations = new double[rpmSteps];
+        rpmGuage.width = new double[rpmSteps];
+        rpmGuage.height = new double[rpmSteps];
 
         for (int i = 0; i < rpmSteps; ++i) {
-            rpmWidth[i] = screenWidth * rpmSizeX;
-            rpmHeight[i] = screenHeight * rpmSizeY;
-            rpmXLocations[i] = screenWidth * rpmSizeX + i * screenWidth * (rpmSizeX + rpmGapX);
-            rpmYLocations[i] = 10;
-
+            rpmGuage.width[i] = screenWidth * rpmSizeX;
+            rpmGuage.height[i] = screenHeight * rpmSizeY;
+            rpmGuage.xLocations[i] = screenWidth * rpmSizeX + i * screenWidth * (rpmSizeX + rpmGapX);
+            rpmGuage.yLocations[i] = 10;
         }
     }
 
@@ -94,20 +92,8 @@ public class TelemetryView {
         return localRpmStep;
     }
 
-    public double[] getRpmXLocations() {
-        return rpmXLocations;
-    }
-
-    public double[] getRpmYLocations() {
-        return rpmYLocations;
-    }
-
-    public double[] getRpmHeight() {
-        return rpmHeight;
-    }
-
-    public double[] getRpmWidth() {
-        return rpmWidth;
+    public RpmGuage getRpmGuage(){
+        return rpmGuage;
     }
 
     public double[] getRpmStepValues() {
@@ -115,7 +101,7 @@ public class TelemetryView {
     }
 
     public int startEmptyGuage() {
-        int emptryGuage = -1;
+        int emptyGuage = -1;
         if (DEBUG) {
             System.out.println("Amount of rpmSteps: " + rpmSteps);
         }
@@ -124,9 +110,9 @@ public class TelemetryView {
                 System.out.println("current rpmStepValue: " + rpmStepValues[i] + "current rpm: " + telemetry.getRpm());
             }
             if (rpmStepValues[i] * .98 < telemetry.getRpm()) {
-                emptryGuage = i;
+                emptyGuage = i;
             }
         }
-        return emptryGuage;
+        return emptyGuage;
     }
 }
