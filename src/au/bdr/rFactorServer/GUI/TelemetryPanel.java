@@ -68,31 +68,32 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             g.setFont(telemetryFont);
 
             int emptyGuage = telemetryView.startEmptyGuage();
-            RpmGuage rpmGuage = telemetryView.getRpmGuage();
 
+            RpmGuage rpmGuage = telemetryView.getRpmGuage();
+            if (telemetryView.getMaxRpm() < 0) {
+                emptyGuage = rpmGuage.amountDrawn;
+            }
             for (int i = 0; i < rpmGuage.amountDrawn; ++i) {
                 if (i > emptyGuage) {
                     g.drawRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
                 } else {
                     g.fillRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
-                }
+                } 
             }
-            
+
             SpeedGuage speedGuage = telemetryView.getSpeedGuage();
             Font speedGuageFont = new Font("Menlo", Font.BOLD, (int) speedGuage.size);
             g.setFont(speedGuageFont);
-            
+
             if (DEBUG) {
                 System.out.println(speedGuage.xLocation + " " + speedGuage.yLocation);
             }
-            g.drawString(speedGuage.toString(), (int) speedGuage.xLocation, (int) speedGuage.yLocation);
-
-
-
-
-            //New code
-            //   telemetry.draw(g, panelSize);
-            //    drawSpeed(g, panelSize, telemetry.getSpeed());
+            g.drawString(speedGuage.getFormatedSpeed(), (int) speedGuage.xLocation, (int) speedGuage.yLocation);
+            g.drawString(rpmGuage.formatedRpm(), (int) (speedGuage.xLocation - speedGuageFont.getSize() / rpmGuage.offset), (int) speedGuage.yLocation + speedGuageFont.getSize());
+            Font speedGuageUnitFont = new Font("Menlo", Font.BOLD, (int) speedGuage.size / 3);
+            g.setFont(speedGuageUnitFont);
+            g.drawString(speedGuage.units, (int) (speedGuage.xLocation + speedGuageFont.getSize2D() * 1.7), (int) speedGuage.yLocation);
+            g.drawString("RPM", (int) (speedGuage.xLocation + speedGuageFont.getSize2D() * 1.7), (int) speedGuage.yLocation + speedGuageFont.getSize());
 
             if (DEBUG) {
                 //         System.out.println(telemetry);

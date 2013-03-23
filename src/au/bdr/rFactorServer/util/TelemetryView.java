@@ -18,6 +18,7 @@ public class TelemetryView {
     private double rpmSizeX = 0.05;
     private double rpmGapX = 0.02;
     private double rpmSizeY = .50;
+    private double rpmXOffset = .02;
     private double speedGuageX = .8;
     private double speedGuageY = .1;
     private double speedFontSize = 10;
@@ -39,10 +40,13 @@ public class TelemetryView {
         resizeScreen(width, height);
         if (telemetry.checkMaxRpm()) {
             //Change the rpmStepValues
+            rpmGuage.maxRpm = telemetry.getMaxRpm();
+            rpmGuage.calculateRpmLength();
             rpmStepValues = new double[rpmSteps];
             rpmStepValues = findRpmSteps(simultaneousEquationSolver(3.5, 10, telemetry.getMaxRpm() / 2, telemetry.getMaxRpm()), rpmSteps);
         }
         speedGuage.speed = telemetry.getSpeed();
+        rpmGuage.currentRpm = telemetry.getRpm();
     }
 
     public double getMaxRpm() {
@@ -68,7 +72,7 @@ public class TelemetryView {
         for (int i = 0; i < rpmGuage.amountDrawn; ++i) {
             rpmGuage.width[i] = screenWidth * rpmSizeX;
             rpmGuage.height[i] = screenHeight * rpmSizeY;
-            rpmGuage.xLocations[i] = screenWidth * rpmSizeX + i * screenWidth * (rpmSizeX + rpmGapX);
+            rpmGuage.xLocations[i] = screenWidth * rpmXOffset +  i * screenWidth * (rpmSizeX + rpmGapX);
             rpmGuage.yLocations[i] = 10;
         }
     }
@@ -133,7 +137,6 @@ public class TelemetryView {
         } else {
             speedGuage.size = screenWidth / speedFontSize;
         }
-        System.out.println("Speed size: " + speedGuage.size);
     }
 
     public SpeedGuage getSpeedGuage() {
