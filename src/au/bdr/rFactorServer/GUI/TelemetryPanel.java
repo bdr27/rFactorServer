@@ -127,6 +127,8 @@ public class TelemetryPanel extends JPanel implements ActionListener {
 //    }
     @Override
     public void actionPerformed(ActionEvent e) {
-        repaint();
+        if (telemetryView.getDisplay()){
+            repaint();
+        }
     }
 }

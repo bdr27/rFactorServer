@@ -38,6 +38,7 @@ public class TelemetrySocket extends Thread {
         while(true){
             try {
                 clientSocket = serverSocket.accept();
+                telemetry.setDisplay(true);
                 readClientStream();
                 telemetry.reset();
             } catch (IOException ex) {

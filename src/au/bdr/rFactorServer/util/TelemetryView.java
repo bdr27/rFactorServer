@@ -143,6 +143,9 @@ public class TelemetryView {
             speedGuage.size = screenWidth / speedFontSize;
         }
     }
+    public boolean getDisplay(){
+        return telemetry.getDisplay();
+    }
 
     public SpeedGuage getSpeedGuage() {
         return speedGuage;

@@ -26,6 +26,7 @@ public class Telemetry {
     private double water = 0;
     private double oil = 0;
     private double fuel = 0;
+    private boolean display = false;
     private String filename = "E:\\Program Files (x86)\\rFactor\\ExampleInternalsTelemetryOutput.txt";
 
     public Telemetry() {
@@ -82,6 +83,14 @@ public class Telemetry {
     public double getSpeed() {
         return speed;
     }
+    
+    public void setDisplay(boolean display){
+        this.display = display;
+    }
+    
+    public boolean getDisplay(){
+        return display;
+    }
 
     @Override
     public String toString() {
@@ -121,6 +130,7 @@ public class Telemetry {
     }
 
     public void reset() {
+        display = false;
         speed = 0;
         rpm = 0;
         maxRpm = 0;
