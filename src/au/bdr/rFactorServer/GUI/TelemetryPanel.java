@@ -4,9 +4,12 @@
  */
 package au.bdr.rFactorServer.GUI;
 
+import au.bdr.rFactorServer.Guage.FuelGuage;
+import au.bdr.rFactorServer.Guage.OilGuage;
 import au.bdr.rFactorServer.util.Debug;
-import au.bdr.rFactorServer.util.RpmGuage;
-import au.bdr.rFactorServer.util.SpeedGuage;
+import au.bdr.rFactorServer.Guage.RpmGuage;
+import au.bdr.rFactorServer.Guage.SpeedGuage;
+import au.bdr.rFactorServer.Guage.WaterGuage;
 import au.bdr.rFactorServer.util.Telemetry;
 import au.bdr.rFactorServer.util.TelemetryView;
 import java.awt.Color;
@@ -61,6 +64,7 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             super.paintComponent(graphic);
             panelSize = this.getSize();
             telemetryView.checkTelemetryView(panelSize.width, panelSize.height);
+            //Font for the first bit
             telemetryFont = new Font("Menlo", Font.BOLD, panelSize.height / 10);
             Graphics2D g = (Graphics2D) graphic;
 
@@ -70,6 +74,11 @@ public class TelemetryPanel extends JPanel implements ActionListener {
             int emptyGuage = telemetryView.startEmptyGuage();
 
             RpmGuage rpmGuage = telemetryView.getRpmGuage();
+            SpeedGuage speedGuage = telemetryView.getSpeedGuage();
+            OilGuage oilGuage = telemetryView.getOilGuage();
+            FuelGuage fuelGuage = telemetryView.getFuelGuage();
+            WaterGuage waterGuage = telemetryView.getWaterGuage();
+
             if (telemetryView.getMaxRpm() < 0) {
                 emptyGuage = rpmGuage.amountDrawn;
             }
@@ -78,22 +87,31 @@ public class TelemetryPanel extends JPanel implements ActionListener {
                     g.drawRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
                 } else {
                     g.fillRect((int) rpmGuage.xLocations[i], (int) rpmGuage.yLocations[i], (int) rpmGuage.width[i], (int) rpmGuage.height[i]);
-                } 
+                }
             }
 
-            SpeedGuage speedGuage = telemetryView.getSpeedGuage();
+
             Font speedGuageFont = new Font("Menlo", Font.BOLD, (int) speedGuage.size);
             g.setFont(speedGuageFont);
 
             if (DEBUG) {
                 System.out.println(speedGuage.xLocation + " " + speedGuage.yLocation);
             }
-            g.drawString(speedGuage.getFormatedSpeed(), (int) speedGuage.xLocation, (int) speedGuage.yLocation);
-            g.drawString(rpmGuage.formatedRpm(), (int) (speedGuage.xLocation - speedGuageFont.getSize() / rpmGuage.offset), (int) speedGuage.yLocation + speedGuageFont.getSize());
+
+            //Draws all the guages maybe make a function
+            g.drawString(speedGuage.formatedIntGuage(speedGuage.speed), (int) speedGuage.xLocation, (int) speedGuage.yLocation);
+            g.drawString(rpmGuage.formatedIntGuage(rpmGuage.currentRpm), (int) (speedGuage.xLocation - speedGuageFont.getSize() / rpmGuage.offset), (int) speedGuage.yLocation + speedGuageFont.getSize());
+            g.drawString(oilGuage.formatedIntGuage(oilGuage.temp), (int) speedGuage.xLocation, (int) speedGuage.yLocation + speedGuageFont.getSize() * 2);
+            g.drawString(waterGuage.formatedIntGuage(waterGuage.temp), (int) speedGuage.xLocation, (int) speedGuage.yLocation + speedGuageFont.getSize() * 3);
+            g.drawString(fuelGuage.formatedDoubleGuage(fuelGuage.amount), (int) (speedGuage.xLocation - speedGuageFont.getSize() / 1.23), (int) speedGuage.yLocation + speedGuageFont.getSize() * 4);
+
             Font speedGuageUnitFont = new Font("Menlo", Font.BOLD, (int) speedGuage.size / 3);
             g.setFont(speedGuageUnitFont);
             g.drawString(speedGuage.units, (int) (speedGuage.xLocation + speedGuageFont.getSize2D() * 1.7), (int) speedGuage.yLocation);
             g.drawString("RPM", (int) (speedGuage.xLocation + speedGuageFont.getSize2D() * 1.7), (int) speedGuage.yLocation + speedGuageFont.getSize());
+            g.drawString("OIL", (int) (speedGuage.xLocation + speedGuageFont.getSize2D() * 1.7), (int) speedGuage.yLocation + speedGuageFont.getSize() * 2);
+            g.drawString("WATER", (int) (speedGuage.xLocation + speedGuageFont.getSize2D() * 1.7), (int) speedGuage.yLocation + speedGuageFont.getSize() * 3);
+            g.drawString("FUEL", (int) (speedGuage.xLocation + speedGuageFont.getSize2D() * 1.7), (int) speedGuage.yLocation + speedGuageFont.getSize() * 4);
 
             if (DEBUG) {
                 //         System.out.println(telemetry);

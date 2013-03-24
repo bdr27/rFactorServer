@@ -18,7 +18,7 @@ public class TelemetrySocket extends Thread {
 
     private String host;
     private int port;
-    private static Telemetry telemetry = new Telemetry();
+    private Telemetry telemetry = new Telemetry();
     private ServerSocket serverSocket = null;
     private Socket clientSocket = null;
 
@@ -39,9 +39,9 @@ public class TelemetrySocket extends Thread {
             try {
                 clientSocket = serverSocket.accept();
                 readClientStream();
+                telemetry.reset();
             } catch (IOException ex) {
                 System.out.println("Failed");
-                
             }
         }
     }

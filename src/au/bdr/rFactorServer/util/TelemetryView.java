@@ -4,6 +4,12 @@
  */
 package au.bdr.rFactorServer.util;
 
+import au.bdr.rFactorServer.Guage.RpmGuage;
+import au.bdr.rFactorServer.Guage.OilGuage;
+import au.bdr.rFactorServer.Guage.WaterGuage;
+import au.bdr.rFactorServer.Guage.SpeedGuage;
+import au.bdr.rFactorServer.Guage.FuelGuage;
+
 /**
  *
  * @author Brendan
@@ -23,8 +29,11 @@ public class TelemetryView {
     private double speedGuageY = .1;
     private double speedFontSize = 10;
     private double[] rpmStepValues = new double[rpmSteps];
-    private RpmGuage rpmGuage = new RpmGuage(rpmSteps);
-    private SpeedGuage speedGuage = new SpeedGuage();
+    private RpmGuage rpmGuage = new RpmGuage(rpmSteps, 4);
+    private SpeedGuage speedGuage = new SpeedGuage(3);
+    private WaterGuage waterGuage = new WaterGuage(3);
+    private OilGuage oilGuage = new OilGuage(3);
+    private FuelGuage fuelGuage = new FuelGuage(4);
 
     public TelemetryView(Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -47,6 +56,9 @@ public class TelemetryView {
         }
         speedGuage.speed = telemetry.getSpeed();
         rpmGuage.currentRpm = telemetry.getRpm();
+        waterGuage.temp = telemetry.getOil();
+        oilGuage.temp = telemetry.getWater();
+        fuelGuage.amount = telemetry.getFuel();        
     }
 
     public double getMaxRpm() {
@@ -105,14 +117,6 @@ public class TelemetryView {
         return localRpmStep;
     }
 
-    public RpmGuage getRpmGuage() {
-        return rpmGuage;
-    }
-
-    public double[] getRpmStepValues() {
-        return rpmStepValues;
-    }
-
     public int startEmptyGuage() {
         int emptyGuage = -1;
         if (DEBUG) {
@@ -129,6 +133,7 @@ public class TelemetryView {
         return emptyGuage;
     }
 
+    //Resizes the Speed font so that it adjusts with the layout
     private void resizeSpeed() {
         speedGuage.xLocation = screenWidth * speedGuageX;
         speedGuage.yLocation = screenHeight * speedGuageY;
@@ -142,4 +147,25 @@ public class TelemetryView {
     public SpeedGuage getSpeedGuage() {
         return speedGuage;
     }
+    
+    public RpmGuage getRpmGuage() {
+        return rpmGuage;
+    }
+
+    public WaterGuage getWaterGuage() {
+        return waterGuage;
+    }
+
+    public OilGuage getOilGuage() {
+        return oilGuage;
+    }
+
+    public FuelGuage getFuelGuage() {
+        return fuelGuage;
+    }
+
+    public double[] getRpmStepValues() {
+        return rpmStepValues;
+    }
+   
 }
