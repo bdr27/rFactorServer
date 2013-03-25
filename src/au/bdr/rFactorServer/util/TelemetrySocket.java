@@ -35,10 +35,9 @@ public class TelemetrySocket extends Thread {
 
     @Override
     public void run() {
-        while(true){
+        while (true) {
             try {
                 clientSocket = serverSocket.accept();
-                telemetry.setDisplay(true);
                 readClientStream();
                 telemetry.reset();
             } catch (IOException ex) {
@@ -60,6 +59,9 @@ public class TelemetrySocket extends Thread {
             case "rpm":
                 telemetry.setRpm(stringToDouble(nameValue[1]));
                 break;
+            case "gear":
+                telemetry.setGear(stringToLong(nameValue[1]));
+                break;
             case "maxrpm":
                 telemetry.setTempMaxRpm(stringToDouble(nameValue[1]));
                 break;
@@ -72,10 +74,22 @@ public class TelemetrySocket extends Thread {
             case "fuel":
                 telemetry.setFuel(stringToDouble(nameValue[1]));
                 break;
+            case "updatescreen":
+                System.out.println("value of update screen: " + nameValue[1]);
+                if (nameValue[1].equals("true")) {
+                    telemetry.setDisplay(true);
+                } else {
+                    telemetry.reset();
+                }
+                break;
             default:
                 System.out.println(nameValue[0] + " is an unimplemented telemetry value");
                 break;
         }
+    }
+
+    private long stringToLong(String number) {
+        return Long.parseLong(number);
     }
 
     private double stringToDouble(String number) {
@@ -89,6 +103,9 @@ public class TelemetrySocket extends Thread {
         bin = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         while ((inputLine = bin.readLine()) != null) {
+            //if (DEBUG) {
+                System.out.println(inputLine);
+            //}
             setTelemetryData(inputLine);
         }
     }

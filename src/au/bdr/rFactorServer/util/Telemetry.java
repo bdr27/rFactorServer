@@ -26,10 +26,19 @@ public class Telemetry {
     private double water = 0;
     private double oil = 0;
     private double fuel = 0;
+    private long gear = 0;
     private boolean display = false;
     private String filename = "E:\\Program Files (x86)\\rFactor\\ExampleInternalsTelemetryOutput.txt";
 
     public Telemetry() {
+    }
+    
+    public long getGear(){
+        return gear;
+    }
+    
+    public void setGear(long gear){
+        this.gear = gear;
     }
 
     public double getRpm() {

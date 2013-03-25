@@ -9,6 +9,7 @@ import au.bdr.rFactorServer.Guage.OilGuage;
 import au.bdr.rFactorServer.Guage.WaterGuage;
 import au.bdr.rFactorServer.Guage.SpeedGuage;
 import au.bdr.rFactorServer.Guage.FuelGuage;
+import au.bdr.rFactorServer.Guage.GearNumber;
 
 /**
  *
@@ -34,6 +35,7 @@ public class TelemetryView {
     private WaterGuage waterGuage = new WaterGuage(3);
     private OilGuage oilGuage = new OilGuage(3);
     private FuelGuage fuelGuage = new FuelGuage(4);
+    private GearNumber gearNumber = new GearNumber();
 
     public TelemetryView(Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -58,11 +60,16 @@ public class TelemetryView {
         rpmGuage.currentRpm = telemetry.getRpm();
         waterGuage.temp = telemetry.getOil();
         oilGuage.temp = telemetry.getWater();
-        fuelGuage.amount = telemetry.getFuel();        
+        fuelGuage.amount = telemetry.getFuel();
+        gearNumber.gear = telemetry.getGear();
     }
 
     public double getMaxRpm() {
         return telemetry.getMaxRpm();
+    }
+    
+    public GearNumber getGearNumber(){
+        return gearNumber;
     }
 
     private void resizeScreen(int width, int height) {
