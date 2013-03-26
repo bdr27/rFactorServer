@@ -137,7 +137,6 @@ public class TelemetryPanel extends JPanel implements ActionListener {
         updateScreen = telemetryView.getDisplay();
         if (updateScreen){
             resetScreen = true;
-            System.out.println("I update");
             repaint();
         }else if(resetScreen){
             repaint();

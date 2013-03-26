@@ -18,6 +18,7 @@ public class TelemetrySocket extends Thread {
 
     private String host;
     private int port;
+    private boolean DEBUG = new Debug().getDebug();
     private Telemetry telemetry = new Telemetry();
     private ServerSocket serverSocket = null;
     private Socket clientSocket = null;
@@ -75,7 +76,6 @@ public class TelemetrySocket extends Thread {
                 telemetry.setFuel(stringToDouble(nameValue[1]));
                 break;
             case "updatescreen":
-                System.out.println("value of update screen: " + nameValue[1]);
                 if (nameValue[1].equals("true")) {
                     telemetry.setDisplay(true);
                 } else {
@@ -103,9 +103,9 @@ public class TelemetrySocket extends Thread {
         bin = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         while ((inputLine = bin.readLine()) != null) {
-            //if (DEBUG) {
+            if (DEBUG) {
                 System.out.println(inputLine);
-            //}
+            }
             setTelemetryData(inputLine);
         }
     }
