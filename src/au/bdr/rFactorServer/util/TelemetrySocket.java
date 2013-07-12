@@ -110,3 +110,41 @@ public class TelemetrySocket extends Thread {
         }
     }
 }
+
+/*
+Telemetry class values.
+* rFactor info
+* Lap - 1
+*   delta - 1
+*   lap number - 2
+*   lap start - 3*   
+* 
+* Vehicle Velocity / Acceleration / position - 2
+*   position - 1
+*       x,y,z
+*   velocity - 2
+*       x,y,z
+*   accel - 3
+*       x,y,z
+* 
+* Vehicle Status - 3
+* 
+* Driver Inputs - 4
+* 
+* Pit - 5
+* 
+* 
+* Wheel - 6
+* 
+* Misc - 7
+*   Vehicle Name - 1
+*   Track Name - 2
+* 
+* Ori / rot / rot acel - 8
+*   ori - x,y,z
+*       x,y,z
+*   rot - 1
+*       x,y,z
+*   rot acel - 2
+*       x,y,z
+* */
