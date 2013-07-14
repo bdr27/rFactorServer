@@ -132,7 +132,6 @@ Telemetry class values.
 * Driver Inputs - 4
 * 
 * Pit - 5
-*   Stops - 1
 * 
 * Wheel - 6
 * 
