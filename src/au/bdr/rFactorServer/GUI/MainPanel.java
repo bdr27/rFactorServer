@@ -43,7 +43,7 @@ public class MainPanel extends JPanel implements ActionListener {
         this.setLayout(layout);
         try {
             //Sets up the telemetrySocket and telemetry
-            telemetrySocket = new TelemetrySocket("127.0.0.1", 27015);
+            telemetrySocket = new TelemetrySocket("127.0.0.1", 50000);
             telemetrySocket.start();
             telemetry = telemetrySocket.getTelemetry();
         } catch (IOException ex) {

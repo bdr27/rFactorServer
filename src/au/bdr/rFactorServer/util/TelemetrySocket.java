@@ -83,7 +83,7 @@ public class TelemetrySocket extends Thread {
                 }
                 break;
             default:
-                System.out.println(nameValue[0] + " is an unimplemented telemetry value");
+               // System.out.println(nameValue[0] + " is an unimplemented telemetry value");
                 break;
         }
     }

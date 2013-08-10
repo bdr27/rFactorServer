@@ -11,7 +11,7 @@ package au.bdr.rFactorServer.util;
  * @author Brendan Russo
  */
 public class Debug {
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = true;
     
     public Debug(){
     }
