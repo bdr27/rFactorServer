@@ -51,13 +51,14 @@ public class TelemetryView {
         resizeScreen(width, height);
         if (telemetry.checkMaxRpm()) {
             //Change the rpmStepValues
-            rpmGuage.maxRpm = telemetry.getMaxRpm();
+            rpmGuage.maxRpm = telemetry.getEngineRpmMax();
             rpmGuage.calculateRpmLength();
             rpmStepValues = new double[rpmSteps];
-            rpmStepValues = findRpmSteps(simultaneousEquationSolver(3.5, 10, telemetry.getMaxRpm() / 2, telemetry.getMaxRpm()), rpmSteps);
+            rpmStepValues = findRpmSteps(simultaneousEquationSolver(3.5, 10, telemetry.getEngineRpmMax() / 2, telemetry.getEngineRpmMax()), rpmSteps);
+            telemetry.maxRpmChange = false;
         }
-        speedGuage.speed = telemetry.getSpeed();
-        rpmGuage.currentRpm = telemetry.getRpm();
+        speedGuage.speed = telemetry.getMeterPerSec();
+        rpmGuage.currentRpm = telemetry.getEngineRpm();
         waterGuage.temp = telemetry.getOil();
         oilGuage.temp = telemetry.getWater();
         fuelGuage.amount = telemetry.getFuel();
@@ -65,7 +66,7 @@ public class TelemetryView {
     }
 
     public double getMaxRpm() {
-        return telemetry.getMaxRpm();
+        return telemetry.getEngineRpmMax();
     }
     
     public GearNumber getGearNumber(){
@@ -131,9 +132,9 @@ public class TelemetryView {
         }
         for (int i = 0; i < rpmSteps; i++) {
             if (DEBUG) {
-                System.out.println("current rpmStepValue: " + rpmStepValues[i] + "current rpm: " + telemetry.getRpm());
+                System.out.println("current rpmStepValue: " + rpmStepValues[i] + "current rpm: " + telemetry.getEngineRpm());
             }
-            if (rpmStepValues[i] * .98 < telemetry.getRpm()) {
+            if (rpmStepValues[i] * .98 < telemetry.getEngineRpm()) {
                 emptyGuage = i;
             }
         }

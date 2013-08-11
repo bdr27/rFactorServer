@@ -29,9 +29,9 @@ public class MainPanel extends JPanel implements ActionListener {
     
 
     private enum AvaliablePages {
-
         HOME, SETTINGS, TELEMETRY
     };
+    
     private AvaliablePages currentPage = AvaliablePages.HOME;
     private BorderLayout layout = new BorderLayout();
     private NavPanel navPanel;

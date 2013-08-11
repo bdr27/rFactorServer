@@ -19,92 +19,93 @@ import java.util.logging.Logger;
 public class Telemetry {
 
     private static final boolean DEBUG = new Debug().getDebug();
-    private double speed = 0;
-    private double rpm = 0;
-    private double maxRpm = 0;
-    private double tempMaxRpm = 0;
-    private double water = 0;
-    private double oil = 0;
-    private double fuel = 0;
-    private long gear = 0;
+    public VehicleStatus vehicleStatus;
+    public boolean maxRpmChange = false;
     private boolean display = false;
     private String filename = "E:\\Program Files (x86)\\rFactor\\ExampleInternalsTelemetryOutput.txt";
 
     public Telemetry() {
-    }
-    
-    public long getGear(){
-        return gear;
-    }
-    
-    public void setGear(long gear){
-        this.gear = gear;
+        vehicleStatus = new VehicleStatus();
     }
 
-    public double getRpm() {
-        return rpm;
+    @Deprecated
+    public long getGear() {
+        return vehicleStatus.gear;
     }
 
-    public void setRpm(double rpm) {
-        this.rpm = rpm;
+    @Deprecated
+    public void setGear(long gear) {
+        vehicleStatus.gear = gear;
     }
 
-    public double getMaxRpm() {
-        return maxRpm;
+    @Deprecated
+    public double getEngineRpm() {
+        return vehicleStatus.engineRpm;
     }
 
-    public void setMaxRpm(double maxRpm) {
-        this.maxRpm = maxRpm;
+    @Deprecated
+    public void setEngineRpm(float engineRpm) {
+        vehicleStatus.engineRpm = engineRpm;
     }
 
-    public void setTempMaxRpm(double tempMaxRpm) {
-        this.tempMaxRpm = tempMaxRpm;
+    @Deprecated
+    public double getEngineRpmMax() {
+        return vehicleStatus.engineRpmMax;
     }
 
-    public double getWater() {
-        return water;
+    @Deprecated
+    public void setEngineRpmMax(float engineRpmMax) {
+        vehicleStatus.engineRpmMax = engineRpmMax;
     }
 
-    public void setWater(double water) {
-        this.water = water;
+    @Deprecated
+    public float getWater() {
+        return vehicleStatus.engineWaterTemp;
     }
 
-    public double getOil() {
-        return oil;
+    @Deprecated
+    public void setWater(float water) {
+        vehicleStatus.engineWaterTemp = water;
     }
 
-    public void setOil(double oil) {
-        this.oil = oil;
+    @Deprecated
+    public float getOil() {
+        return vehicleStatus.engineOilTemp;
     }
 
-    public double getFuel() {
-        return fuel;
+    @Deprecated
+    public void setOil(float oil) {
+        vehicleStatus.engineOilTemp = oil;
     }
 
-    public void setFuel(double fuel) {
-        this.fuel = fuel;
+    @Deprecated
+    public float getFuel() {
+        return vehicleStatus.fuel;
     }
 
-    public void setSpeed(double speed) {
-        this.speed = speed;
+    @Deprecated
+    public void setFuel(float fuel) {
+        vehicleStatus.fuel = fuel;
     }
 
-    public double getSpeed() {
-        return speed;
+    @Deprecated
+    public void setMeterPerSec(float speed) {
+        vehicleStatus.meterPerSec = speed;
     }
-    
-    public void setDisplay(boolean display){
+
+    @Deprecated
+    public float getMeterPerSec() {
+        return vehicleStatus.meterPerSec;
+    }
+
+    @Deprecated
+    public void setDisplay(boolean display) {
         this.display = display;
     }
-    
-    public boolean getDisplay(){
+
+    @Deprecated
+    public boolean getDisplay() {
         return display;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Speed=%f%nRpm=%f%nMaxRmp=%f%nWater=%f%nOil=%f%nFuel=%f%n", speed, rpm, maxRpm, water, oil, fuel);
-
     }
 
     /*
@@ -118,34 +119,52 @@ public class Telemetry {
             while (fin.hasNextLine()) {
                 String temp = fin.nextLine().toLowerCase();
                 if (temp.contains("speed")) {
-                    speed = Double.parseDouble(temp.split(" ")[2]);
+                    vehicleStatus.meterPerSec = Float.parseFloat(temp.split(" ")[2]);
                 }
             }
-            System.out.println("Speed: " + speed);
+            System.out.println("Speed: " + vehicleStatus.meterPerSec);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Telemetry.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public boolean checkMaxRpm() {
-        if (DEBUG) {
-            System.out.println("max rpm: " + maxRpm + "temp max rpm: " + tempMaxRpm);
-        }
-        if (maxRpm != tempMaxRpm && tempMaxRpm > 50) {
-            maxRpm = tempMaxRpm;
-            return true;
-        }
-        return false;
-    }
-
     public void reset() {
         display = false;
-        speed = 0;
-        rpm = 0;
-        maxRpm = 0;
-        tempMaxRpm = 0;
-        water = 0;
-        oil = 0;
-        fuel = 0;
+        vehicleStatus.reset();
+    }
+
+    boolean checkMaxRpm() {
+        return maxRpmChange;
+    }
+
+    public class VehicleStatus {
+
+        public long gear = 0;
+        public float engineRpm = 0.0f;
+        public float engineWaterTemp = 0.0f;
+        public float engineOilTemp = 0.0f;
+        public float clutchRpm = 0.0f;
+        public float fuel = 0.0f;
+        public float engineRpmMax = 0.0f;
+        public long schedualedStops = 0;
+        public float meterPerSec = 0.0f;
+
+        public void reset() {
+            gear = 0;
+            engineRpm = 0.0f;
+            engineWaterTemp = 0.0f;
+            engineOilTemp = 0.0f;
+            clutchRpm = 0.0f;
+            fuel = 0.0f;
+            engineRpmMax = 0.0f;
+            schedualedStops = 0;
+            meterPerSec = 0.0f;
+        }
+        
+        @Override
+        public String toString()
+        {
+            return String.format("GEAR: %d, ENGINE RPM: %.0f", gear, engineRpm);
+        }
     }
 }

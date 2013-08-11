@@ -4,6 +4,7 @@
  */
 package au.bdr.rFactorServer.util;
 
+import au.bdr.rFactorServer.util.Telemetry.VehicleStatus;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -51,49 +52,12 @@ public class TelemetrySocket extends Thread {
         return telemetry;
     }
 
-    private void setTelemetryData(String inputLine) {
-        String[] nameValue = inputLine.split("=");
-        switch (nameValue[0].toLowerCase()) {
-            case "speed":
-                telemetry.setSpeed(stringToDouble(nameValue[1]));
-                break;
-            case "rpm":
-                telemetry.setRpm(stringToDouble(nameValue[1]));
-                break;
-            case "gear":
-                telemetry.setGear(stringToLong(nameValue[1]));
-                break;
-            case "maxrpm":
-                telemetry.setTempMaxRpm(stringToDouble(nameValue[1]));
-                break;
-            case "water":
-                telemetry.setWater(stringToDouble(nameValue[1]));
-                break;
-            case "oil":
-                telemetry.setOil(stringToDouble(nameValue[1]));
-                break;
-            case "fuel":
-                telemetry.setFuel(stringToDouble(nameValue[1]));
-                break;
-            case "updatescreen":
-                if (nameValue[1].equals("true")) {
-                    telemetry.setDisplay(true);
-                } else {
-                    telemetry.reset();
-                }
-                break;
-            default:
-               // System.out.println(nameValue[0] + " is an unimplemented telemetry value");
-                break;
-        }
-    }
-
     private long stringToLong(String number) {
         return Long.parseLong(number);
     }
 
-    private double stringToDouble(String number) {
-        return Double.parseDouble(number);
+    private float stringToFloat(String number) {
+        return Float.parseFloat(number);
     }
 
     private void readClientStream() throws IOException {
@@ -107,6 +71,112 @@ public class TelemetrySocket extends Thread {
                 System.out.println(inputLine);
             }
             setTelemetryData(inputLine);
+            //setTelemetryDataOld(inputLine);
+        }
+    }
+
+    @Deprecated
+    private void setTelemetryDataOld(String inputLine) {
+        String[] nameValue = inputLine.split("=");
+        switch (nameValue[0].toLowerCase()) {
+            case "speed":
+                telemetry.setMeterPerSec(stringToFloat(nameValue[1]));
+                break;
+            case "rpm":
+                telemetry.setEngineRpm(stringToFloat(nameValue[1]));
+                break;
+            case "gear":
+                telemetry.setGear(stringToLong(nameValue[1]));
+                break;
+            case "maxrpm":
+                telemetry.setEngineRpmMax(stringToFloat(nameValue[1]));
+                telemetry.maxRpmChange = true;
+                break;
+            case "water":
+                telemetry.setWater(stringToFloat(nameValue[1]));
+                break;
+            case "oil":
+                telemetry.setOil(stringToFloat(nameValue[1]));
+                break;
+            case "fuel":
+                telemetry.setFuel(stringToFloat(nameValue[1]));
+                break;
+            case "updatescreen":
+                if (nameValue[1].equals("true")) {
+                    telemetry.setDisplay(true);
+                } else {
+                    telemetry.reset();
+                }
+                break;
+            default:
+                // System.out.println(nameValue[0] + " is an unimplemented telemetry value");
+                break;
+        }
+    }
+
+    private void setTelemetryData(String inputLine) {
+        String[] nameValue = inputLine.split("=");
+        String[] types = nameValue[0].split(",");
+        switch (types[0]) {
+            case "0":
+                 break;
+            case "1":
+                 break;
+            case "2":
+                 break;
+            case "3":
+                break;
+            case "4":
+                setTelemetryStatus(types, nameValue[1]);
+                break;
+            case "5":
+                 break;
+            case "6":
+                 break;
+            case "7":
+                 break;
+            case "8":
+                 break;
+            default:
+                if(DEBUG)
+                {
+                    System.out.println("Unknown message type");
+                }
+                break;
+        }
+    }
+
+    private void setTelemetryStatus(String[] types, String value) {
+        VehicleStatus vehicleStatus = telemetry.vehicleStatus;
+        switch (types[1]){
+            case "0":   
+                vehicleStatus.gear = stringToLong(value);
+                break;
+            case "1":
+                vehicleStatus.engineRpm = stringToFloat(value);
+                break;
+            case "2":
+                vehicleStatus.engineWaterTemp = stringToFloat(value);
+                break;
+            case "3":
+                vehicleStatus.engineOilTemp = stringToFloat(value);
+                break;
+            case "4":
+                vehicleStatus.clutchRpm = stringToFloat(value);
+                break;
+            case "5":
+                vehicleStatus.fuel = stringToFloat(value);
+                break;
+            case "6":
+                vehicleStatus.engineRpmMax = stringToFloat(value);
+                break;
+            case "7":
+                vehicleStatus.schedualedStops = stringToLong(value);
+                break;
+            case "8":
+                vehicleStatus.meterPerSec = stringToFloat(value);
+                System.out.println(telemetry.vehicleStatus.toString());
+                break;
         }
     }
 }
@@ -127,7 +197,7 @@ Telemetry class values.
 *   accel - 3
 *       x,y,z
 * 
-* Vehicle Status - 3
+* Vehicle VehicleStatus - 3
 * 
 * Driver Inputs - 4
 * 
