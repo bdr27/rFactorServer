@@ -5,7 +5,7 @@
 package au.bdr.rFactorServer.GUI;
 
 import au.bdr.rFactorServer.util.Debug;
-import au.bdr.rFactorServer.util.Telemetry;
+import TelemetryInfo.VehicleTelemetry;
 import au.bdr.rFactorServer.util.TelemetrySocket;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -22,7 +22,7 @@ import javax.swing.JPanel;
  */
 public class MainPanel extends JPanel implements ActionListener {
     private TelemetrySocket telemetrySocket;
-    private Telemetry telemetry;
+    private VehicleTelemetry telemetry;
     
     private static boolean DEBUG = new Debug().getDebug();
 

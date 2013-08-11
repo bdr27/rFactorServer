@@ -11,7 +11,7 @@ import au.bdr.rFactorServer.util.Debug;
 import au.bdr.rFactorServer.Guage.RpmGuage;
 import au.bdr.rFactorServer.Guage.SpeedGuage;
 import au.bdr.rFactorServer.Guage.WaterGuage;
-import au.bdr.rFactorServer.util.Telemetry;
+import TelemetryInfo.VehicleTelemetry;
 import au.bdr.rFactorServer.util.TelemetryView;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -38,7 +38,7 @@ public class TelemetryPanel extends JPanel implements ActionListener {
     private TelemetryView telemetryView;
     private Timer timer;
 
-    public TelemetryPanel(Telemetry telemetry) {
+    public TelemetryPanel(VehicleTelemetry telemetry) {
         this.telemetryView = new TelemetryView(telemetry);
         timer = new Timer(100, this);
     }

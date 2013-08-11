@@ -4,6 +4,7 @@
  */
 package au.bdr.rFactorServer.util;
 
+import TelemetryInfo.VehicleTelemetry;
 import au.bdr.rFactorServer.Guage.RpmGuage;
 import au.bdr.rFactorServer.Guage.OilGuage;
 import au.bdr.rFactorServer.Guage.WaterGuage;
@@ -18,7 +19,7 @@ import au.bdr.rFactorServer.Guage.GearNumber;
 public class TelemetryView {
 
     private final boolean DEBUG = new Debug().getDebug();
-    private Telemetry telemetry;
+    private VehicleTelemetry telemetry;
     private int screenWidth = 0;
     private int screenHeight = 0;
     private int rpmSteps = 10;
@@ -37,13 +38,13 @@ public class TelemetryView {
     private FuelGuage fuelGuage = new FuelGuage(4);
     private GearNumber gearNumber = new GearNumber();
 
-    public TelemetryView(Telemetry telemetry) {
+    public TelemetryView(VehicleTelemetry telemetry) {
         this.telemetry = telemetry;
         // Potential load config file at some point
     }
 
     /*
-     * Method that will check weather any value for the Telemetry view has 
+     * Method that will check weather any value for the VehicleTelemetry view has 
      * changed. Will be called everytime before the object is redrawn to make
      * sure the max rpm hasn't changed or screen size changed ect.
      */

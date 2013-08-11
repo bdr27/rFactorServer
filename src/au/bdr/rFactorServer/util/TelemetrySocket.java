@@ -1,10 +1,18 @@
 /*
- * Telemetry socket class that gets the required information from the 
+ * VehicleTelemetry socket class that gets the required information from the 
  * plugin. At the moment only rfactor is supported.
  */
 package au.bdr.rFactorServer.util;
 
-import au.bdr.rFactorServer.util.Telemetry.VehicleStatus;
+import TelemetryInfo.Coordinate;
+import TelemetryInfo.VehicleDriverInput;
+import TelemetryInfo.VehicleOrientation;
+import TelemetryInfo.VehiclePosition;
+import TelemetryInfo.VehicleState;
+import TelemetryInfo.VehicleStatus;
+import TelemetryInfo.VehicleTelemetry;
+import TelemetryInfo.VehicleTime;
+import TelemetryInfo.VehicleWheel;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,7 +28,7 @@ public class TelemetrySocket extends Thread {
     private String host;
     private int port;
     private boolean DEBUG = new Debug().getDebug();
-    private Telemetry telemetry = new Telemetry();
+    private VehicleTelemetry vehicleTelemetry = new VehicleTelemetry();
     private ServerSocket serverSocket = null;
     private Socket clientSocket = null;
 
@@ -37,19 +45,29 @@ public class TelemetrySocket extends Thread {
 
     @Override
     public void run() {
+        System.out.println(vehicleTelemetry.vehicleTime);
+        System.out.println(vehicleTelemetry.vehiclePosition);
+        System.out.println(vehicleTelemetry.vehicleOrientation);
+        System.out.println(vehicleTelemetry.vehicleStatus);
+        System.out.println(vehicleTelemetry.vehicleDriverInput);
+        System.out.println(vehicleTelemetry.vehicleState);
+        for (VehicleWheel wh : vehicleTelemetry.vehicleWheels) {
+            System.out.println(wh);
+        }
+
         while (true) {
             try {
                 clientSocket = serverSocket.accept();
                 readClientStream();
-                telemetry.reset();
+                vehicleTelemetry.reset();
             } catch (IOException ex) {
                 System.out.println("Failed");
             }
         }
     }
 
-    public Telemetry getTelemetry() {
-        return telemetry;
+    public VehicleTelemetry getTelemetry() {
+        return vehicleTelemetry;
     }
 
     private long stringToLong(String number) {
@@ -58,6 +76,17 @@ public class TelemetrySocket extends Thread {
 
     private float stringToFloat(String number) {
         return Float.parseFloat(number);
+    }
+
+    private Coordinate stringToCoordinate(String value) {
+        String[] values = value.split(",");
+        Coordinate coordinate = new Coordinate();
+        if (values.length == 3) {
+            coordinate.x = stringToFloat(values[0]);
+            coordinate.y = stringToFloat(values[1]);
+            coordinate.z = stringToFloat(values[2]);
+        }
+        return coordinate;
     }
 
     private void readClientStream() throws IOException {
@@ -71,7 +100,6 @@ public class TelemetrySocket extends Thread {
                 System.out.println(inputLine);
             }
             setTelemetryData(inputLine);
-            //setTelemetryDataOld(inputLine);
         }
     }
 
@@ -80,32 +108,32 @@ public class TelemetrySocket extends Thread {
         String[] nameValue = inputLine.split("=");
         switch (nameValue[0].toLowerCase()) {
             case "speed":
-                telemetry.setMeterPerSec(stringToFloat(nameValue[1]));
+                vehicleTelemetry.setMeterPerSec(stringToFloat(nameValue[1]));
                 break;
             case "rpm":
-                telemetry.setEngineRpm(stringToFloat(nameValue[1]));
+                vehicleTelemetry.setEngineRpm(stringToFloat(nameValue[1]));
                 break;
             case "gear":
-                telemetry.setGear(stringToLong(nameValue[1]));
+                vehicleTelemetry.setGear(stringToLong(nameValue[1]));
                 break;
             case "maxrpm":
-                telemetry.setEngineRpmMax(stringToFloat(nameValue[1]));
-                telemetry.maxRpmChange = true;
+                vehicleTelemetry.setEngineRpmMax(stringToFloat(nameValue[1]));
+                vehicleTelemetry.maxRpmChange = true;
                 break;
             case "water":
-                telemetry.setWater(stringToFloat(nameValue[1]));
+                vehicleTelemetry.setWater(stringToFloat(nameValue[1]));
                 break;
             case "oil":
-                telemetry.setOil(stringToFloat(nameValue[1]));
+                vehicleTelemetry.setOil(stringToFloat(nameValue[1]));
                 break;
             case "fuel":
-                telemetry.setFuel(stringToFloat(nameValue[1]));
+                vehicleTelemetry.setFuel(stringToFloat(nameValue[1]));
                 break;
             case "updatescreen":
                 if (nameValue[1].equals("true")) {
-                    telemetry.setDisplay(true);
+                    vehicleTelemetry.setDisplay(true);
                 } else {
-                    telemetry.reset();
+                    vehicleTelemetry.reset();
                 }
                 break;
             default:
@@ -119,37 +147,104 @@ public class TelemetrySocket extends Thread {
         String[] types = nameValue[0].split(",");
         switch (types[0]) {
             case "0":
-                 break;
+                break;
             case "1":
-                 break;
+                setTelemetryVehicleTime(types, nameValue[1]);
+                break;
             case "2":
-                 break;
+                setTelemetryVehiclePositions(types, nameValue[1]);
+                break;
             case "3":
+                setTelemetryVehicleOrientation(types, nameValue[1]);
                 break;
             case "4":
-                setTelemetryStatus(types, nameValue[1]);
+                setTelemetryVehicleStatus(types, nameValue[1]);
                 break;
             case "5":
-                 break;
+                setTelemetryVehicleDriverInput(types, nameValue[1]);
+                break;
             case "6":
-                 break;
+
+                break;
             case "7":
-                 break;
+                setTelemetryVehicleState(types, nameValue[1]);
+                break;
             case "8":
-                 break;
+                setTelemetryVehicleWheel(nameValue);
+                break;
             default:
-                if(DEBUG)
-                {
+                if (DEBUG) {
                     System.out.println("Unknown message type");
                 }
                 break;
         }
     }
 
-    private void setTelemetryStatus(String[] types, String value) {
-        VehicleStatus vehicleStatus = telemetry.vehicleStatus;
-        switch (types[1]){
-            case "0":   
+    private void setTelemetryVehicleTime(String[] types, String value) {
+        VehicleTime vehicleTime = vehicleTelemetry.vehicleTime;
+        switch (types[1]) {
+            case "0":
+                vehicleTime.delta = stringToFloat(value);
+                System.out.println("");
+                System.out.println(vehicleTelemetry.vehicleTime);
+                break;
+            case "1":
+                vehicleTime.lapNumber = stringToLong(value);
+                break;
+            case "2":
+                vehicleTime.lapStartET = stringToFloat(value);
+                break;
+            default:
+                System.out.println("Invalid Input");
+        }
+    }
+
+    private void setTelemetryVehiclePositions(String[] types, String value) {
+        VehiclePosition vehiclePosition = vehicleTelemetry.vehiclePosition;
+        switch (types[1]) {
+            case "0":
+                vehiclePosition.pos = stringToCoordinate(value);
+                break;
+            case "1":
+                vehiclePosition.localVel = stringToCoordinate(value);
+                break;
+            case "2":
+                vehiclePosition.localAccel = stringToCoordinate(value);
+                System.out.println(vehicleTelemetry.vehiclePosition);
+                break;
+            default:
+                System.out.println("Invalid Input");
+        }
+    }
+
+    private void setTelemetryVehicleOrientation(String[] types, String value) {
+        VehicleOrientation vehicleOrientation = vehicleTelemetry.vehicleOrientation;
+        switch (types[1]) {
+            case "0":
+                vehicleOrientation.oriX = stringToCoordinate(value);
+                break;
+            case "1":
+                vehicleOrientation.oriY = stringToCoordinate(value);
+                break;
+            case "2":
+                vehicleOrientation.oriZ = stringToCoordinate(value);
+                break;
+            case "3":
+                vehicleOrientation.localRot = stringToCoordinate(value);
+                break;
+            case "4":
+                vehicleOrientation.localRotAccel = stringToCoordinate(value);
+                System.out.println(vehicleTelemetry.vehicleOrientation);
+                break;
+            default:
+                System.out.println("Invalid Input");
+        }
+    }
+
+    private void setTelemetryVehicleStatus(String[] types, String value) {
+        VehicleStatus vehicleStatus = vehicleTelemetry.vehicleStatus;
+        switch (types[1]) {
+            case "0":
                 vehicleStatus.gear = stringToLong(value);
                 break;
             case "1":
@@ -175,45 +270,118 @@ public class TelemetrySocket extends Thread {
                 break;
             case "8":
                 vehicleStatus.meterPerSec = stringToFloat(value);
-                System.out.println(telemetry.vehicleStatus.toString());
+                System.out.println(vehicleTelemetry.vehicleStatus);
+                break;
+            default:
+                System.out.println("Invalid Input");
+        }
+    }
+
+    private void setTelemetryVehicleDriverInput(String[] types, String value) {
+        VehicleDriverInput vehicleDriverInput = vehicleTelemetry.vehicleDriverInput;
+        switch (types[1]) {
+            case "0":
+                vehicleDriverInput.unfilteredThrottle = stringToFloat(value);
+                break;
+            case "1":
+                vehicleDriverInput.unfilteredBrake = stringToFloat(value);
+                break;
+            case "2":
+                vehicleDriverInput.unfilteredSteering = stringToFloat(value);
+                break;
+            case "3":
+                vehicleDriverInput.unfilteredClutch = stringToFloat(value);
+                System.out.println(vehicleTelemetry.vehicleDriverInput);
                 break;
         }
     }
-}
 
-/*
-Telemetry class values.
-* rFactor info
-* Lap - 1
-*   delta - 1
-*   lap number - 2
-*   lap start - 3*   
-* 
-* Vehicle Velocity / Acceleration / position - 2
-*   position - 1
-*       x,y,z
-*   velocity - 2
-*       x,y,z
-*   accel - 3
-*       x,y,z
-* 
-* Vehicle VehicleStatus - 3
-* 
-* Driver Inputs - 4
-* 
-* Pit - 5
-* 
-* Wheel - 6
-* 
-* Misc - 7
-*   Vehicle Name - 1
-*   Track Name - 2
-* 
-* Ori / rot / rot acel - 8
-*   ori - x,y,z
-*       x,y,z
-*   rot - 1
-*       x,y,z
-*   rot acel - 2
-*       x,y,z
-* */
+    private void setTelemetryVehicleState(String[] types, String value) {
+        VehicleState vehicleState = vehicleTelemetry.vehicleState;
+        switch (types[1]) {
+            case "0":
+                vehicleState.overheating = stringToBool(value);
+                break;
+            case "1":
+                vehicleState.detached = stringToBool(value);
+                break;
+            case "2":
+                setDentSeverity(types, value, vehicleState.dentSeverity);
+                break;
+            case "3":
+                vehicleState.lastImpactET = stringToFloat(value);
+                break;
+            case "4":
+                vehicleState.lastImpactMagnitude = stringToFloat(value);
+                break;
+            case "5":
+                vehicleState.lastImpactPos = stringToCoordinate(value);
+                System.out.println(vehicleTelemetry.vehicleState);
+                break;
+        }
+    }
+
+    private void setTelemetryVehicleWheel(String[] nameValue) {
+        String[] types = nameValue[0].split(",");
+        String value = nameValue[1];
+        int wheel = Integer.parseInt(types[2]);
+        VehicleWheel vehicleWheel = vehicleTelemetry.vehicleWheels[wheel];
+        switch (types[1]) {
+            case "0":
+                vehicleWheel.rotation = stringToFloat(value);
+                break;
+            case "1":
+                vehicleWheel.suspenstionDeflection = stringToFloat(value);
+                break;
+            case "2":
+                vehicleWheel.rideHeight = stringToFloat(value);
+                break;
+            case "3":
+                vehicleWheel.tireLoad = stringToFloat(value);
+                break;
+            case "4":
+                vehicleWheel.lateralForce = stringToFloat(value);
+                break;
+            case "5":
+                vehicleWheel.gripFract = stringToFloat(value);
+                break;
+            case "6":
+                vehicleWheel.brakeTemp = stringToFloat(value);
+                break;
+            case "7":
+                vehicleWheel.pressure = stringToFloat(value);
+                break;
+            case "8":
+                vehicleWheel.temperature = stringToCoordinate(value);
+                break;
+            case "9":
+                vehicleWheel.wear = stringToFloat(value);
+                break;
+            case "10":
+                vehicleWheel.terrainName = value;
+                break;
+            case "11":
+                vehicleWheel.surfaceType = value.charAt(0);
+                break;
+            case "12":
+                vehicleWheel.flat = stringToBool(value);
+                break;
+            case "13":
+                vehicleWheel.detached = stringToBool(value);
+                System.out.println(vehicleTelemetry.vehicleWheels[wheel]);
+                break;
+        }
+    }
+
+    private boolean stringToBool(String value) {
+        if (value.contains("1")) {
+            return true;
+        }
+        return false;
+    }
+
+    private void setDentSeverity(String[] types, String value, float[] dentSeverity) {
+        int pos = Integer.parseInt(types[2]);
+        dentSeverity[pos] = stringToFloat(value);
+    }
+}
