@@ -24,6 +24,7 @@ public class VehicleTelemetry {
     public VehicleOrientation vehicleOrientation; 
     public VehicleStatus vehicleStatus;
     public VehicleDriverInput vehicleDriverInput;
+    public VehicleMisc vehicleMisc;
     public VehicleState vehicleState;
     public VehicleWheel[] vehicleWheels;
     public boolean maxRpmChange = false;
@@ -36,6 +37,7 @@ public class VehicleTelemetry {
         vehicleOrientation = new VehicleOrientation();
         vehicleStatus = new VehicleStatus();
         vehicleDriverInput = new VehicleDriverInput();
+        vehicleMisc = new VehicleMisc();
         vehicleState = new VehicleState();
         vehicleWheels = new VehicleWheel[4];
         for(int i = 0; i < 4; i++){

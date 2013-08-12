@@ -9,7 +9,7 @@ package TelemetryInfo;
  * @author Brendan
  */
 public class VehicleWheel implements VehicleReset {
-
+    
     public float rotation = 0.0f;
     public float suspenstionDeflection = 0.0f;
     public float rideHeight = 0.0f;

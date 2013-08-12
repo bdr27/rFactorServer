@@ -6,6 +6,7 @@ package au.bdr.rFactorServer.util;
 
 import TelemetryInfo.Coordinate;
 import TelemetryInfo.VehicleDriverInput;
+import TelemetryInfo.VehicleMisc;
 import TelemetryInfo.VehicleOrientation;
 import TelemetryInfo.VehiclePosition;
 import TelemetryInfo.VehicleState;
@@ -16,6 +17,9 @@ import TelemetryInfo.VehicleWheel;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -45,11 +49,28 @@ public class TelemetrySocket extends Thread {
 
     @Override
     public void run() {
+        
+        String msgToSend = "I am god";
+        try {
+            InetAddress group;
+            int port;
+            group = InetAddress.getByName("228.5.6.7");
+            port = Integer.parseInt("50001");
+
+            //create Multicast socket to to pretending group
+            MulticastSocket s = new MulticastSocket(port);
+            s.joinGroup(group);
+
+            DatagramPacket dgram = new DatagramPacket(msgToSend.getBytes(), msgToSend.length(), group ,port);
+            s.send(dgram);  
+        } catch (IOException ie) {
+        }
         System.out.println(vehicleTelemetry.vehicleTime);
         System.out.println(vehicleTelemetry.vehiclePosition);
         System.out.println(vehicleTelemetry.vehicleOrientation);
         System.out.println(vehicleTelemetry.vehicleStatus);
         System.out.println(vehicleTelemetry.vehicleDriverInput);
+        System.out.println(vehicleTelemetry.vehicleMisc);
         System.out.println(vehicleTelemetry.vehicleState);
         for (VehicleWheel wh : vehicleTelemetry.vehicleWheels) {
             System.out.println(wh);
@@ -164,7 +185,7 @@ public class TelemetrySocket extends Thread {
                 setTelemetryVehicleDriverInput(types, nameValue[1]);
                 break;
             case "6":
-
+                setTelemetryVehicleMisc(types, nameValue[1]);
                 break;
             case "7":
                 setTelemetryVehicleState(types, nameValue[1]);
@@ -292,6 +313,22 @@ public class TelemetrySocket extends Thread {
             case "3":
                 vehicleDriverInput.unfilteredClutch = stringToFloat(value);
                 System.out.println(vehicleTelemetry.vehicleDriverInput);
+                break;
+        }
+    }
+
+    private void setTelemetryVehicleMisc(String[] types, String value) {
+        VehicleMisc vehicleMisc = vehicleTelemetry.vehicleMisc;
+        switch (types[1]) {
+            case "0":
+                vehicleMisc.steeringArmForce = stringToFloat(value);
+                System.out.println(vehicleTelemetry.vehicleMisc);
+                break;
+            case "1":
+                vehicleMisc.trackName = value;
+                break;
+            case "2":
+                vehicleMisc.vehicleName = value;
                 break;
         }
     }
