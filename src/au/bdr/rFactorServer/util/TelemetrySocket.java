@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  *
@@ -21,6 +22,10 @@ import java.net.Socket;
 public class TelemetrySocket extends Thread {
 
     private String host;
+    private MulticastSocket multicastSocket;
+    private InetAddress multicastGroup;
+    private DatagramPacket multicastPacket;
+    private int multicastPort;
     private int port;
     private boolean DEBUG = new Debug().getDebug();
     private VehicleTelemetry vehicleTelemetry = new VehicleTelemetry();
@@ -30,6 +35,7 @@ public class TelemetrySocket extends Thread {
     public TelemetrySocket(String host, int port) throws IOException {
         this.host = host;
         this.port = port;
+        multicastPort = 50000; 
         serverSocket = new ServerSocket(port);
     }
 
@@ -41,19 +47,13 @@ public class TelemetrySocket extends Thread {
     @Override
     public void run() {
         
-        String msgToSend = "I am god";
+        String msgToSend = "I am still god";
         try {
-            InetAddress group;
-            int port;
-            group = InetAddress.getByName("228.5.6.7");
-            port = Integer.parseInt("50001");
+            SetupMulticast("228.5.6.7",50001);
 
-            //create Multicast socket to to pretending group
-            MulticastSocket s = new MulticastSocket(port);
-            s.joinGroup(group);
 
-            DatagramPacket dgram = new DatagramPacket(msgToSend.getBytes(), msgToSend.length(), group ,port);
-            s.send(dgram);  
+            multicastPacket = new DatagramPacket(msgToSend.getBytes(), msgToSend.length(), multicastGroup ,multicastPort);
+            multicastSocket.send(multicastPacket);  
         } catch (IOException ie) {
         }
         System.out.println(vehicleTelemetry.vehicleTime);
@@ -76,6 +76,14 @@ public class TelemetrySocket extends Thread {
                 System.out.println("Failed");
             }
         }
+    }
+    
+    private void SetupMulticast(String ipAddress, int port) throws UnknownHostException, IOException
+    {
+        
+        multicastGroup = InetAddress.getByName("228.5.6.7");
+        multicastSocket = new MulticastSocket(port);
+        multicastSocket.joinGroup(multicastGroup);        
     }
 
     public VehicleTelemetry getTelemetry() {
@@ -111,8 +119,19 @@ public class TelemetrySocket extends Thread {
             if (DEBUG) {
                 System.out.println(inputLine);
             }
+            try{
+            sendMulticast(inputLine);
+            }catch(IOException ex)
+            {
+                System.out.println(ex.toString());
+            }
             setTelemetryData(inputLine);
         }
+    }
+    
+    private void sendMulticast(String inputLine) throws IOException {
+        multicastPacket.setData(inputLine.getBytes());
+        multicastSocket.send(multicastPacket);
     }
 
     @Deprecated
