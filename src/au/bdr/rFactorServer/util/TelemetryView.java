@@ -4,7 +4,7 @@
  */
 package au.bdr.rFactorServer.util;
 
-import TelemetryInfo.VehicleTelemetry;
+import au.bdr.telemetryInfo.VehicleTelemetry;
 import au.bdr.rFactorServer.Guage.RpmGuage;
 import au.bdr.rFactorServer.Guage.OilGuage;
 import au.bdr.rFactorServer.Guage.WaterGuage;

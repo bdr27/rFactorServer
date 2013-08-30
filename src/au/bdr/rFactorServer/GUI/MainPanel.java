@@ -5,7 +5,7 @@
 package au.bdr.rFactorServer.GUI;
 
 import au.bdr.rFactorServer.util.Debug;
-import TelemetryInfo.VehicleTelemetry;
+import au.bdr.telemetryInfo.VehicleTelemetry;
 import au.bdr.rFactorServer.util.TelemetrySocket;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

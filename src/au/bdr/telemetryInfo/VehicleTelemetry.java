@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package TelemetryInfo;
+package au.bdr.telemetryInfo;
 
 import au.bdr.rFactorServer.util.Debug;
 import java.io.File;

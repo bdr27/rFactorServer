@@ -4,7 +4,16 @@
  */
 package au.bdr.rFactorServer.util;
 
-import TelemetryInfo.*;
+import au.bdr.telemetryInfo.VehicleOrientation;
+import au.bdr.telemetryInfo.VehicleTelemetry;
+import au.bdr.telemetryInfo.Coordinate;
+import au.bdr.telemetryInfo.VehicleState;
+import au.bdr.telemetryInfo.VehicleTime;
+import au.bdr.telemetryInfo.VehiclePosition;
+import au.bdr.telemetryInfo.VehicleStatus;
+import au.bdr.telemetryInfo.VehicleMisc;
+import au.bdr.telemetryInfo.VehicleWheel;
+import au.bdr.telemetryInfo.VehicleDriverInput;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

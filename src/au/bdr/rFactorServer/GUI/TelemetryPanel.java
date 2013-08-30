@@ -11,7 +11,7 @@ import au.bdr.rFactorServer.util.Debug;
 import au.bdr.rFactorServer.Guage.RpmGuage;
 import au.bdr.rFactorServer.Guage.SpeedGuage;
 import au.bdr.rFactorServer.Guage.WaterGuage;
-import TelemetryInfo.VehicleTelemetry;
+import au.bdr.telemetryInfo.VehicleTelemetry;
 import au.bdr.rFactorServer.util.TelemetryView;
 import java.awt.Color;
 import java.awt.Dimension;
