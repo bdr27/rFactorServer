@@ -238,6 +238,7 @@ public class TelemetrySocket extends Thread {
                 System.out.println("Invalid Input");
         }
     }
+    //TODO Change to make dependant on the classes maybe
 
     private void setTelemetryVehiclePositions(String[] types, String value) {
         VehiclePosition vehiclePosition = vehicleTelemetry.vehiclePosition;
