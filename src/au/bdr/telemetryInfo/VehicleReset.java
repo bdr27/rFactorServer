@@ -10,4 +10,5 @@ package au.bdr.telemetryInfo;
  */
 public interface VehicleReset {
     public void reset();
+   // public boolean checkValue(String input);
 }

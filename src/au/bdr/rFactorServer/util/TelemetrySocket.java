@@ -56,7 +56,7 @@ public class TelemetrySocket extends Thread {
     @Override
     public void run() {
         
-        String msgToSend = "I am still god";
+        /*String msgToSend = "I am still god";
         try {
             SetupMulticast("228.5.6.7",50001);
 
@@ -64,7 +64,7 @@ public class TelemetrySocket extends Thread {
             multicastPacket = new DatagramPacket(msgToSend.getBytes(), msgToSend.length(), multicastGroup ,multicastPort);
             multicastSocket.send(multicastPacket);  
         } catch (IOException ie) {
-        }
+        }*/
         System.out.println(vehicleTelemetry.vehicleTime);
         System.out.println(vehicleTelemetry.vehiclePosition);
         System.out.println(vehicleTelemetry.vehicleOrientation);
@@ -88,8 +88,7 @@ public class TelemetrySocket extends Thread {
     }
     
     private void SetupMulticast(String ipAddress, int port) throws UnknownHostException, IOException
-    {
-        
+    {        
         multicastGroup = InetAddress.getByName("228.5.6.7");
         multicastSocket = new MulticastSocket(port);
         multicastSocket.joinGroup(multicastGroup);        
