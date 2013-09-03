@@ -8,7 +8,7 @@ package au.bdr.telemetryInfo;
  *
  * @author Brendan
  */
-public class VehicleState implements VehicleReset {
+public class VehicleState implements ITelemetry {
 
     public boolean overheating = false;
     public boolean detached = false;
@@ -38,5 +38,10 @@ public class VehicleState implements VehicleReset {
         return String.format("%slastImpactET: %f, lastImpactMagnitude: %f, "
                 + "lastImpactPos: %s", beginning, lastImpactET, 
                 lastImpactMagnitude, lastImpactPos);
+    }
+
+    @Override
+    public boolean checkValue(String input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

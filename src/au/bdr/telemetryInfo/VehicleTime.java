@@ -8,7 +8,7 @@ package au.bdr.telemetryInfo;
  *
  * @author Brendan
  */
-public class VehicleTime implements VehicleReset {
+public class VehicleTime implements ITelemetry {
     public float delta = 0.0f;
     public long lapNumber = 0;
     public float lapStartET = 0.0f;
@@ -24,5 +24,10 @@ public class VehicleTime implements VehicleReset {
     public String toString() {
         return String.format("delta: %.4f, lapNumber: %d, lapStartET: %.4f", 
                 delta, lapNumber, lapStartET);
+    }
+
+    @Override
+    public boolean checkValue(String input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

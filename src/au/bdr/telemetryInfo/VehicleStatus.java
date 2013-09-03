@@ -8,7 +8,7 @@ package au.bdr.telemetryInfo;
  *
  * @author Brendan
  */
-public class VehicleStatus implements VehicleReset {
+public class VehicleStatus implements ITelemetry {
 
     public long gear = 0;
     public float engineRpm = 0.0f;
@@ -39,5 +39,10 @@ public class VehicleStatus implements VehicleReset {
                 + " engineOilTemp: %.2f, clutchRpm: %.0f, fuel: %.2f,"
                 + " engineRpmMax: %.0f, schedualedStops: %d, meterPerSec: %.2f", gear, engineRpm, engineWaterTemp, engineOilTemp, clutchRpm,
                 fuel, engineRpmMax, schedualedStops, meterPerSec);
+    }
+
+    @Override
+    public boolean checkValue(String input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

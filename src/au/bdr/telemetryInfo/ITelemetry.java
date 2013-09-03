@@ -8,7 +8,7 @@ package au.bdr.telemetryInfo;
  *
  * @author Brendan
  */
-public interface VehicleReset {
+public interface ITelemetry {
     public void reset();
-   // public boolean checkValue(String input);
+    public boolean checkValue(String input);
 }

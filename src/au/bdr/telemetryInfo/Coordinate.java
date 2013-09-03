@@ -8,7 +8,7 @@ package au.bdr.telemetryInfo;
  *
  * @author Brendan
  */
-public class Coordinate implements VehicleReset{
+public class Coordinate implements ITelemetry{
     public float x = 0.0f;
     public float y = 0.0f;
     public float z = 0.0f;
@@ -23,5 +23,10 @@ public class Coordinate implements VehicleReset{
         x = 0.0f;
         y = 0.0f;
         z = 0.0f;
+    }
+
+    @Override
+    public boolean checkValue(String input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

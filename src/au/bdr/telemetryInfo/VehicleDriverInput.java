@@ -8,7 +8,7 @@ package au.bdr.telemetryInfo;
  *
  * @author Brendan
  */
-public class VehicleDriverInput implements VehicleReset {
+public class VehicleDriverInput implements ITelemetry {
 
     public float unfilteredThrottle = 0.0f;
     public float unfilteredBrake = 0.0f;
@@ -29,5 +29,10 @@ public class VehicleDriverInput implements VehicleReset {
                 + "unfilteredSteering: %s, unfilteredClutch: %s, ", 
                 unfilteredThrottle, unfilteredBrake, unfilteredSteering, 
                 unfilteredClutch);
+    }
+
+    @Override
+    public boolean checkValue(String input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

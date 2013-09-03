@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Brendan
  */
-public class VehicleOrientation implements VehicleReset {
+public class VehicleOrientation implements ITelemetry {
 
     public Coordinate oriX = new Coordinate();
     public Coordinate oriY = new Coordinate();
@@ -35,5 +35,10 @@ public class VehicleOrientation implements VehicleReset {
     public String toString() {
         return String.format("oriX: %s, oriY: %s, oriZ: %s, localRot: %s, "
                 + "localRotAccel: %s", oriX, oriY, oriZ, localRot, localRotAccel);
+    }
+
+    @Override
+    public boolean checkValue(String input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

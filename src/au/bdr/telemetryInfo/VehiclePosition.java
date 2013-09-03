@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Brendan
  */
-public class VehiclePosition implements VehicleReset{
+public class VehiclePosition implements ITelemetry{
     public Coordinate pos = new Coordinate();
     public Coordinate localVel = new Coordinate();
     public Coordinate localAccel = new Coordinate();
@@ -31,6 +31,11 @@ public class VehiclePosition implements VehicleReset{
     {
         return String.format("pos: %s, localVel: %s, localAccel: %s", pos, 
                 localVel, localAccel);
+    }
+
+    @Override
+    public boolean checkValue(String input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

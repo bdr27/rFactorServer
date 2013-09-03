@@ -31,6 +31,7 @@ public class VehicleTelemetry {
     private boolean display = false;
     private String filename = "E:\\Program Files (x86)\\rFactor\\ExampleInternalsTelemetryOutput.txt";
 
+    //Redo to have it pull different info
     public VehicleTelemetry() {        
         vehicleTime = new VehicleTime();
         vehiclePosition = new VehiclePosition();
@@ -147,14 +148,14 @@ public class VehicleTelemetry {
 
     public void reset() {
         display = false;
-        ArrayList<VehicleReset> vi = new ArrayList<>();
+        ArrayList<ITelemetry> vi = new ArrayList<>();
         vi.add(vehicleTime);
         vi.add(vehiclePosition);
         vi.add(vehicleOrientation);
         vi.add(vehicleStatus);
         vi.add(vehicleDriverInput);
         vi.add(vehicleState);
-        for (VehicleReset vr : vi) {
+        for (ITelemetry vr : vi) {
             vr.reset();
         }
     }

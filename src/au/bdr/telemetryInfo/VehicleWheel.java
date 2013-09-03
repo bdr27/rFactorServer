@@ -8,7 +8,7 @@ package au.bdr.telemetryInfo;
  *
  * @author Brendan
  */
-public class VehicleWheel implements VehicleReset {
+public class VehicleWheel implements ITelemetry {
     
     public float rotation = 0.0f;
     public float suspenstionDeflection = 0.0f;
@@ -52,5 +52,10 @@ public class VehicleWheel implements VehicleReset {
                 rotation, suspenstionDeflection, rideHeight, tireLoad, 
                 lateralForce, gripFract, brakeTemp, pressure, temperature, wear, 
                 terrainName, surfaceType, flat, detached);
+    }
+
+    @Override
+    public boolean checkValue(String input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
