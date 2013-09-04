@@ -82,6 +82,7 @@ public class TelemetrySocket extends Thread {
                 readClientStream();
                 vehicleTelemetry.reset();
             } catch (IOException ex) {
+                System.out.println(ex);
                 System.out.println("Failed");
             }
         }
